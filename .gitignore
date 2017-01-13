@@ -4,11 +4,14 @@
 *_flymake.h
 *_flymake.cpp
 TAGS
+*~
 
 # autotools stuff
 Makefile
 /autom4te.cache/
-/config.*
+/config.log
+/config.status
+/config.h
 /stamp-h?
 .deps/
 /libtool
