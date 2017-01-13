@@ -1,0 +1,6 @@
+site_name: Larasynth Documentation
+repo_url: https://github.com/sommern/larasynth
+pages:
+- Home: index.md
+- User Guide: guide.md
+theme: readthedocs

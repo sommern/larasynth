@@ -1,0 +1,23 @@
+{
+ "cell_count": 2,
+ "cell_states": [
+  0.5,
+  1.2,
+  0.0,
+  -0.5
+ ],
+ "ctrls": [
+  1
+ ],
+ "epoch": 10,
+ "mse": 0.0,
+ "outputs": [
+  3,
+  2
+ ],
+ "sample_count": 2,
+ "targets": [
+  2,
+  3
+ ]
+}

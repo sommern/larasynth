@@ -1,0 +1,15 @@
+*.o
+*.a
+*.d
+*_flymake.h
+*_flymake.cpp
+TAGS
+
+# autotools stuff
+Makefile
+/autom4te.cache/
+/config.*
+/stamp-h?
+.deps/
+/libtool
+.dirstamp
