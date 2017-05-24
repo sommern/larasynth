@@ -72,34 +72,9 @@ void Recorder::record() {
 
   cout << endl << "writing " << events_to_write.size() << " events" << endl;
 
-  ofstream outfile( _filename );
+  write_events( events_to_write, _filename );
 
   for( Event* event : events_to_write ) {
-    write_event( event, outfile );
     _midi_client->return_input_event( event );
   }
-}
-
-void Recorder::write_event( Event* event, ofstream& outfile ) {
-  ostringstream line_oss;
-
-  switch( event->type() ) {
-  case CTRL_CHANGE:
-    line_oss << "ctrl " << (unsigned int)event->controller() << " "
-             << (unsigned int) event->value() << " " << event->time();
-    break;
-  case NOTE_ON:
-    line_oss << "on " << (unsigned int)event->pitch() << " "
-             << (unsigned int)event->velocity() << " "
-             << event->time();
-    break;
-  case NOTE_OFF:
-    line_oss << "off " << (unsigned int)event->pitch() << " "
-             << event->time();
-    break;
-  default:
-    break;
-  }
-
-  outfile << line_oss.str() << endl;;
 }

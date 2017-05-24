@@ -28,6 +28,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include "midi_config.hpp"
 #include "config_directory.hpp"
 #include "midi_client.hpp"
+#include "write_training_example.hpp"
 #include "run_modes.hpp"
 
 namespace larasynth {
@@ -42,8 +43,6 @@ public:
   void record();
 
 private:
-  void write_event( Event* event, std::ofstream& outfile );
-
   std::string _filename;
 
   MidiClient* _midi_client;

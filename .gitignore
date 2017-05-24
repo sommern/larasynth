@@ -8,6 +8,8 @@ TAGS
 
 # autotools stuff
 Makefile
+Makefile.in
+configure
 /autom4te.cache/
 /config.log
 /config.status
