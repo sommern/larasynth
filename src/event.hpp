@@ -64,6 +64,8 @@ public:
 
   void set_note_on( event_data_t channel, event_data_t note,
                     event_data_t velocity, size_t time );
+  void set_note_off( event_data_t channel, event_data_t note,
+                     event_data_t velocity, size_t time );
 
   void set_controller( event_data_t ctrl ) { _message[1] = ctrl; }
   void set_value( event_data_t value ) { _message[2] = value; }

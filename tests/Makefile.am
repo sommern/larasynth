@@ -2,8 +2,7 @@ AM_CPPFLAGS = -isystem $(top_srcdir)/lib/gtest/include -I$(top_srcdir)/src $(GTE
 AM_CXXFLAGS = $(GTEST_CXXFLAGS)
 AM_LDFLAGS = $(GTEST_LDFLAGS) $(GTEST_LIBS) \
 	     $(top_srcdir)/lib/gtest/lib/libgtest_main.la \
-	     $(top_srcdir)/lib/gtest/lib/libgtest.la \
-	     `pkg-config --cflags --libs sqlite3`
+	     $(top_srcdir)/lib/gtest/lib/libgtest.la
 
 
 # TESTS -- Programs run automatically by "make check"
@@ -175,3 +174,14 @@ trainer_test_LDADD += $(top_srcdir)/src/training_sequence_parser.o
 trainer_test_LDADD += $(top_srcdir)/src/training_results.o
 trainer_test_LDADD += $(top_srcdir)/src/training_config.o
 
+TESTS += midi_file_reader_test
+check_PROGRAMS += midi_file_reader_test
+midi_file_reader_test_SOURCES = midi_file_reader_test.cpp
+midi_file_reader_test_LDADD = $(top_srcdir)/src/midifile/MidiFile.o
+midi_file_reader_test_LDADD += $(top_srcdir)/src/midifile/MidiMessage.o
+midi_file_reader_test_LDADD += $(top_srcdir)/src/midifile/Binasc.o
+midi_file_reader_test_LDADD += $(top_srcdir)/src/midifile/MidiEventList.o
+midi_file_reader_test_LDADD += $(top_srcdir)/src/midifile/Options.o
+midi_file_reader_test_LDADD += $(top_srcdir)/src/midifile/MidiEvent.o
+midi_file_reader_test_LDADD += $(top_srcdir)/src/midi_file_reader.o
+midi_file_reader_test_LDADD += $(top_srcdir)/src/event.o

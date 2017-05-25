@@ -96,6 +96,14 @@ void Event::set_note_on( event_data_t channel, event_data_t note,
   _time = time;
 }
 
+void Event::set_note_off( event_data_t channel, event_data_t note,
+                          event_data_t velocity, size_t time ) {
+  _message[0] = NOTE_OFF | channel;
+  _message[1] = note;
+  _message[2] = velocity;
+  _time = time;
+}
+
 string Event::description( const string& label ) const {
   ostringstream oss;
 
