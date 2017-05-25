@@ -1,4 +1,4 @@
-/**
+/** @file
  * Main entry point for larasynth.
  *
  * Parses the command line arguments and initiates the appropriate actions.
@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <signal.h>
+#include <map>
 
 #include "config_directory.hpp"
 #include "interactive_prompt.hpp"
@@ -19,6 +20,7 @@
 #include "recorder.hpp"
 #include "trainer.hpp"
 #include "performer.hpp"
+#include "midi_file_reader.hpp"
 
 using namespace std;
 using namespace larasynth;
@@ -31,14 +33,15 @@ void signal_handler( int signal ) {
 
 void print_usage_and_exit( int argc, char** argv ) {
   cerr << "Usage: " << argv[0]
-       << " <action> <project directory>" << endl << endl
+       << " <project directory> <action>" << endl << endl
        << "Actions:" << endl << endl
-       << "  config  - create the project directory if it does not exist and create " << endl
-       << "            a larasynth.conf file in the project directory" << endl
-       << "  record  - record an example MIDI performance" << endl
-       << "  train   - train a model using the training example(s)" << endl
-       << "  perform - use one of the trained models to control a synthesizer's continuous" << endl
-       << "            controllers during performance" << endl;
+       << "  config               - create the project directory if it does not exist and" << endl
+       << "                         create a larasynth.conf file in the project directory" << endl
+       << "  record               - record a training example via a MIDI port" << endl
+       << "  read <MIDI filename> - create a training example from a MIDI file" << endl
+       << "  train                - train a model using the current training example(s)" << endl
+       << "  perform              - use one of the trained models to control a" << endl
+       << "                         synthesizer's continuous controllers during performance" << endl;
   exit( EXIT_FAILURE );
 }
 
@@ -103,12 +106,43 @@ void record( const string& directory_name ) {
 }
 
 /**
+ * Read a training example from a MIDI file.
+ */
+void read( const string& directory_name, const string& midi_filename ) {
+  ConfigDirectory dir( directory_name );
+  dir.process_directory();
+
+  ConfigParser cp( dir.get_config_file_path() );
+  ConfigParameters params = cp.get_section_params( "midi" );
+  MidiConfig mc( params );
+
+  MidiFileReader reader( midi_filename, mc.get_ctrls() );
+  vector<Event> events = reader.get_events();
+
+  cout << "Read events from " << reader.get_track_count() << " tracks in "
+       << midi_filename << ": " << endl
+       << "  " << reader.get_note_on_count() << " notes" << endl
+       << "  " << reader.get_ctrl_change_count() << " controller events"
+       << endl;
+
+  string training_example_filename = dir.get_new_training_example_filename();
+
+  write_events( events, training_example_filename );
+
+  cout << "Wrote " << events.size() << " events to "
+       << training_example_filename << endl;
+}
+
+/**
  * Train a model.
  */
 void train( const string& directory_name ) {
   Trainer( directory_name, &lara_shutdown_flag );
 }
 
+/**
+ * Perform using a trained model.
+ */
 void perform( const string& directory_name ) {
   ConfigDirectory dir( directory_name );
   dir.process_directory();
@@ -168,27 +202,49 @@ void perform( const string& directory_name ) {
  * larasynth entry point.
  */
 int main( int argc, char** argv ) {
-  // we need an action and a project directory
-  if( argc != 3 )
+  // we need a project directory and an action
+  if( argc < 3 )
     print_usage_and_exit( argc, argv );
 
   signal( SIGINT, signal_handler );
 
-  string action = argv[1];
-  string directory_name = argv[2];
+  string directory_name = argv[1];
+  string action = argv[2];
+
+  map<string, int> action_argc = {
+    { "config", 3 },
+    { "record", 3 },
+    { "read", 4 },
+    { "train", 3 },
+    { "perform", 3 }
+  };
+
+  if( action_argc.count( action ) == 0 ) {
+    cerr << action << " is not a valid action." << endl << endl;
+    print_usage_and_exit( argc, argv );
+  }
+
+  if( argc != action_argc[action] ) {
+    cerr << "Invalid parameters for " << action << endl << endl;
+    print_usage_and_exit( argc, argv );
+  }
 
   try {
-    if( action == "config" )
+    if( action == "config" ) {
       config( directory_name );
-    else if( action == "record" )
+    }
+    else if( action == "record" ) {
       record( directory_name );
-    else if( action == "train" )
+    }
+    else if( action == "read" ) {
+      string midi_filename = argv[3];
+      read( directory_name, midi_filename );
+    }
+    else if( action == "train" ) {
       train( directory_name );
-    else if( action == "perform" )
+    }
+    else if( action == "perform" ) {
       perform( directory_name );
-    else {
-      cerr << action << " is not a valid action." << endl << endl;
-      print_usage_and_exit( argc, argv );
     }
   }
   catch( runtime_error& e ) {
