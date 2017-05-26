@@ -39,11 +39,43 @@ MidiConfig::MidiConfig( ConfigParameters& config_params ) {
   if( defaults.size() % 2 != 0 )
     throw MidiConfigException( "Controller defaults are set like so:\ncontroller_defaults: <ctrl 1>, <ctrl 1 default>, <ctrl 2>, <ctrl 2 default> ..." );
 
+  if( defaults.size() != _ctrls.size() * 2 )
+    throw MidiConfigException( "The size of the \"controller_defaults\" list does not match the \"controllers\"\nlist" );
+
+  set<event_data_t> ctrls_set( _ctrls.begin(), _ctrls.end() );
+
+  if( ctrls_set.size() != _ctrls.size() )
+    throw MidiConfigException( "Each controller may appear only once in the \"controllers\" list" );
+
+  set<event_data_t> defaults_set;
+
   for( size_t i = 0; i < defaults.size(); i += 2 ) {
     event_data_t ctrl = defaults[i];
     event_data_t value = defaults[i+1];
 
     _ctrl_defaults[ctrl] = value;
+
+    defaults_set.insert( ctrl );
+  }
+
+  if( ctrls_set != defaults_set ) {
+    ostringstream error_oss;
+
+    error_oss << "The controllers in the \"controllers\" and "
+              << "\"controller_defaults\" lists must"
+              << endl << "match." << endl
+              << " controllers: ";
+
+    for( auto ctrl : ctrls_set )
+      error_oss << (unsigned int)ctrl << " ";
+
+    error_oss << endl
+              << " controller_defaults: ";
+
+    for( auto ctrl : defaults_set )
+      error_oss << (unsigned int)ctrl << " ";
+
+    throw MidiConfigException( error_oss.str() );
   }
 
   unordered_map<string,string*> port_var_pointers = {

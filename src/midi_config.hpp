@@ -26,6 +26,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <unordered_map>
 #include <cassert>
+#include <set>
 
 #include "lstm_types.hpp"
 #include "config_parameters.hpp"
