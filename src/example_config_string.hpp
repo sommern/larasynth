@@ -24,8 +24,8 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 namespace larasynth {
 
 static const std::string example_config =
-R"(# Sections are denoted by names in square brackets. Lines that begin with a
-# # are comments and are ignored by larasynth.
+R"(# Sections are denoted by names in square brackets. Lines that begin with a #
+# are comments and are ignored by larasynth.
 
 # The [midi] section specifies which controllers should be controlled by
 # larasynth and what their default values should be. It can also be used to
@@ -36,7 +36,7 @@ R"(# Sections are denoted by names in square brackets. Lines that begin with a
 controllers = 1, 2
 
 # Default controller values are also specified as a comma separated list. Here
-# controller 1 defaults to 4 and controller 2 defaults to 127
+# controller 1 defaults to 0 and controller 2 defaults to 127
 controller_defaults =
    1, 0,
    2, 127
