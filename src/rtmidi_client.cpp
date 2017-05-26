@@ -38,7 +38,9 @@ RtMidiClient::RtMidiClient(  const string& client_name,
 }
 
 void RtMidiClient::setup_midi_in() {
-  _midi_in = new RtMidiIn();
+  _midi_in = new RtMidiIn( RtMidi::UNSPECIFIED, _client_name );
+
+  string our_port_name = _client_name + " input";
 
   size_t input_port_count = _midi_in->getPortCount();
 
@@ -73,9 +75,9 @@ void RtMidiClient::setup_midi_in() {
   }  
 
   if( input_port_i < (int)input_port_count )
-    _midi_in->openPort( input_port_i );
+    _midi_in->openPort( input_port_i, our_port_name );
   else
-    _midi_in->openVirtualPort();
+    _midi_in->openVirtualPort( our_port_name );
 
   _midi_in->setCallback( &input_callback, &_input_queue );
 
@@ -84,7 +86,9 @@ void RtMidiClient::setup_midi_in() {
 }
 
 void RtMidiClient::setup_midi_out() {
-  _midi_out = new RtMidiOut();
+  _midi_out = new RtMidiOut( RtMidi::UNSPECIFIED, _client_name );
+
+  string our_port_name = _client_name + " output";
 
   size_t output_port_count = _midi_out->getPortCount();
 
@@ -120,9 +124,9 @@ void RtMidiClient::setup_midi_out() {
 
   
   if( output_port_i < (int)output_port_count )
-    _midi_out->openPort( output_port_i );
+    _midi_out->openPort( output_port_i, our_port_name );
   else
-    _midi_out->openVirtualPort();
+    _midi_out->openVirtualPort( our_port_name );
 
   cout << "Sending to port " << port_choices[output_port_i].description
        << endl;
