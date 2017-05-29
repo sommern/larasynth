@@ -115,14 +115,19 @@ void TrainingResults::add_connections( const vector< pair< Id_t, Id_t > >&
 vector<pair<Id_t,Id_t> > TrainingResults::get_connections() {
   vector<pair<Id_t,Id_t> > connections;
 
-  if( _json["connections"].size() % 2 != 0 ) {
-    string error = "Invalid number of connections in " + _filename;
-    throw TrainingResultsException( error );
-  }
+  try {
+    if( _json["connections"].size() % 2 != 0 ) {
+      string error = "Invalid number of connections in " + _filename;
+      throw TrainingResultsException( error );
+    }
 
-  for( size_t i = 0; i < _json["connections"].size(); i += 2 ) {
-    connections.emplace_back( _json["connections"][i],
-                              _json["connections"][i+1] );
+    for( size_t i = 0; i < _json["connections"].size(); i += 2 ) {
+      connections.emplace_back( _json["connections"][i],
+                                _json["connections"][i+1] );
+    }
+  }
+  catch( const domain_error& e ) {
+    throw TrainingResultsException( e.what() );
   }
 
   return connections;
@@ -137,7 +142,9 @@ void TrainingResults::add_units_properties( const vector<LstmUnitProperties>&
     unit_json["type"] = unit_type_to_string( unit_properties.get_type() );
     unit_json["act_func"] =
       act_func_type_to_string( unit_properties.get_act_func_type() );
-    unit_json["self_conn_gater"] = unit_properties.get_self_conn_gater();
+
+    if( unit_properties.get_self_conn_gater() != NO_UNIT )
+      unit_json["self_conn_gater"] = unit_properties.get_self_conn_gater();
 
     _json["units_properties"].push_back( unit_json );
 
@@ -146,21 +153,35 @@ void TrainingResults::add_units_properties( const vector<LstmUnitProperties>&
 }
 
 vector<LstmUnitProperties> TrainingResults::get_units_properties() {
-  unordered_map<Id_t, vector<LstmGatedConn> > gated_conns =
-    get_all_gated_conns();
-
   vector<LstmUnitProperties> properties;
 
-  for( auto& unit_json : _json["units_properties"] ) {
-    Id_t id = unit_json["id"];
-    lstm_unit_t type = string_to_unit_type( unit_json["type"] );
-    lstm_act_func_t act_func_type =
-      string_to_act_func_type( unit_json["act_func"] );
-    Id_t self_conn_gater = unit_json["self_conn_gater"];
-    vector<LstmGatedConn> unit_gated_conns = gated_conns[id];
+  try {
+    unordered_map<Id_t, vector<LstmGatedConn> > gated_conns =
+      get_all_gated_conns();
 
-    properties.emplace_back( id, type, act_func_type, self_conn_gater,
-                             unit_gated_conns );
+    for( auto& unit_json : _json["units_properties"] ) {
+      Id_t id = unit_json["id"];
+      lstm_unit_t type = string_to_unit_type( unit_json["type"] );
+      lstm_act_func_t act_func_type =
+        string_to_act_func_type( unit_json["act_func"] );
+
+      Id_t self_conn_gater;
+
+      try {
+        self_conn_gater = unit_json["self_conn_gater"];
+      }
+      catch ( const domain_error& e ) {
+        self_conn_gater = NO_UNIT;
+      }
+
+      vector<LstmGatedConn> unit_gated_conns = gated_conns[id];
+
+      properties.emplace_back( id, type, act_func_type, self_conn_gater,
+                               unit_gated_conns );
+    }
+  }
+  catch( const domain_error& e ) {
+    throw TrainingResultsException( e.what() );
   }
 
   return properties;
@@ -251,9 +272,16 @@ MidiMinMax TrainingResults::get_min_max() {
 }
 
 LstmNetwork TrainingResults::get_trained_network() {
-  size_t unit_count = _json["arch_unit_count"];
-  size_t input_count = _json["arch_input_count"];
-  size_t output_count = _json["arch_output_count"];  
+  size_t unit_count, input_count, output_count;
+
+  try {
+    unit_count = _json["arch_unit_count"];
+    input_count = _json["arch_input_count"];
+    output_count = _json["arch_output_count"];
+  }
+  catch( const domain_error& e ) {
+    throw TrainingResultsException( e.what() );
+  }
 
   LstmNetwork net( input_count, output_count, unit_count,
                     get_connections(), get_units_properties(), false );
@@ -334,23 +362,34 @@ void TrainingResults::add_repr_config( const RepresentationConfig&
 }
 
 RepresentationConfig TrainingResults::get_repr_config() {
-  json config_json = _json["representation_config"];
-
   feature_config_t feature_config;
 
-  if( config_json["use_feature_some_note_on"] )
-    feature_config[SOME_NOTE_ON] = true;
-  if( config_json["use_feature_note_struck"] )
-    feature_config[NOTE_STRUCK] = true;
-  if( config_json["use_feature_note_released"] )
-    feature_config[NOTE_RELEASED] = true;
-  if( config_json["use_feature_velocity"] )
-    feature_config[VELOCITY] = true;
-  if( config_json["use_feature_interval"] )
-    feature_config[INTERVAL] = true;
+  vector<unsigned long> ctrl_output_counts;
+  size_t update_rate;
 
-  RepresentationConfig config( config_json["ctrl_output_counts"],
-                               config_json["update_rate"],
+  try {
+    json config_json = _json["representation_config"];
+
+    if( config_json["use_feature_some_note_on"] )
+      feature_config[SOME_NOTE_ON] = true;
+    if( config_json["use_feature_note_struck"] )
+      feature_config[NOTE_STRUCK] = true;
+    if( config_json["use_feature_note_released"] )
+      feature_config[NOTE_RELEASED] = true;
+    if( config_json["use_feature_velocity"] )
+      feature_config[VELOCITY] = true;
+    if( config_json["use_feature_interval"] )
+      feature_config[INTERVAL] = true;
+
+    ctrl_output_counts =
+      config_json["ctrl_output_counts"].get< vector<size_t> >();
+    update_rate = config_json["update_rate"];
+  }
+  catch( const domain_error& e ) {
+    throw TrainingResultsException( e.what() );
+  }
+
+  RepresentationConfig config( ctrl_output_counts, update_rate,
                                feature_config );
 
   return config;

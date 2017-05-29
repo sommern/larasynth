@@ -40,7 +40,7 @@ void print_usage_and_exit( int argc, char** argv ) {
        << "  record               - record a training example via a MIDI port" << endl
        << "  read <MIDI filename> - create a training example from a MIDI file" << endl
        << "  train                - train a model using the current training example(s)" << endl
-       << "  perform              - use one of the trained models to control a" << endl
+       << "  perform [-v]         - use one of the trained models to control a" << endl
        << "                         synthesizer's continuous controllers during performance" << endl;
   exit( EXIT_FAILURE );
 }
@@ -143,7 +143,7 @@ void train( const string& directory_name ) {
 /**
  * Perform using a trained model.
  */
-void perform( const string& directory_name ) {
+void perform( const string& directory_name, bool verbose ) {
   ConfigDirectory dir( directory_name );
   dir.process_directory();
 
@@ -192,21 +192,27 @@ void perform( const string& directory_name ) {
   if( choice_i >= results_filenames.size() )
     exit( EXIT_FAILURE );
 
-  TrainingResults results( results_filenames[choice_i], READ_RESULTS );
+  try {
+    TrainingResults results( results_filenames[choice_i], READ_RESULTS );
 
-  MidiMinMax min_max = results.get_min_max();
+    MidiMinMax min_max = results.get_min_max();
 
-  LstmNetwork net = results.get_trained_network();
+    LstmNetwork net = results.get_trained_network();
 
-  RepresentationConfig repr_config = results.get_repr_config();
+    RepresentationConfig repr_config = results.get_repr_config();
 
-  RtMidiClient midi_client( "larasynth",
-                            midi_config.get_performing_source_port(),
-                            midi_config.get_performing_destination_port(),
-                            PERFORM );
+    RtMidiClient midi_client( "larasynth",
+                              midi_config.get_performing_source_port(),
+                              midi_config.get_performing_destination_port(),
+                              PERFORM );
 
-  Performer p( &midi_client, net, midi_config, repr_config, min_max,
-               &lara_shutdown_flag );
+    Performer p( &midi_client, net, midi_config, repr_config, min_max,
+                 &lara_shutdown_flag, verbose );
+  }
+  catch( const TrainingResultsException& e ) {
+    cerr << "Error reading " << results_filenames[choice_i] << endl
+         << "Please choose a different file or re-train" << endl;
+  }
 }
 
 /**
@@ -222,12 +228,12 @@ int main( int argc, char** argv ) {
   string directory_name = argv[1];
   string action = argv[2];
 
-  map<string, int> action_argc = {
-    { "config", 3 },
-    { "record", 3 },
-    { "read", 4 },
-    { "train", 3 },
-    { "perform", 3 }
+  map< string, vector<int> > action_argc = {
+    { "config", { 3 } },
+    { "record", { 3 } },
+    { "read", { 4 } },
+    { "train", { 3 } },
+    { "perform", { 3, 4 } }
   };
 
   if( action_argc.count( action ) == 0 ) {
@@ -235,7 +241,9 @@ int main( int argc, char** argv ) {
     print_usage_and_exit( argc, argv );
   }
 
-  if( argc != action_argc[action] ) {
+  if( find( action_argc[action].begin(),
+            action_argc[action].end(),
+            argc ) == action_argc[action].end() ) {
     cerr << "Invalid parameters for " << action << endl << endl;
     print_usage_and_exit( argc, argv );
   }
@@ -255,7 +263,19 @@ int main( int argc, char** argv ) {
       train( directory_name );
     }
     else if( action == "perform" ) {
-      perform( directory_name );
+      bool verbose = false;
+
+      if( argc == 4 ) {
+        if( strcmp( argv[3], "-v" ) == 0 ) {
+          verbose = true;
+        }
+        else {
+          cerr << "Unknown argument " << argv[3] << endl;
+          print_usage_and_exit( argc, argv );
+        }
+      }
+
+      perform( directory_name, verbose );
     }
   }
   catch( runtime_error& e ) {
