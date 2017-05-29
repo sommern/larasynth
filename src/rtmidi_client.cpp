@@ -70,19 +70,26 @@ void RtMidiClient::setup_midi_in() {
     input_port_i = pick_choice( "Select a MIDI port port to receive from:",
                                 port_choices, port_choices.size() - 1 );
 
+    cout << endl;
+
     if( input_port_i == (int)input_port_count + 1 )
       throw_exception( "No input port selected." );
   }  
 
-  if( input_port_i < (int)input_port_count )
+  if( input_port_i < (int)input_port_count ) {
     _midi_in->openPort( input_port_i, _our_input_port_name );
-  else
+    cout << "Receiving from port \"" << port_choices[input_port_i].description
+         << "\"" << endl;
+  }
+  else {
     _midi_in->openVirtualPort( _our_input_port_name );
+    cout << "Opened port \"" << _our_output_port_name
+         << "\" for other devices to connect to" << endl;
+  }
+
+  cout << endl;
 
   _midi_in->setCallback( &input_callback, &_input_queue );
-
-  cout << "Receiving from port " << port_choices[input_port_i].description
-       << endl;
 }
 
 void RtMidiClient::setup_midi_out() {
@@ -116,18 +123,25 @@ void RtMidiClient::setup_midi_out() {
     output_port_i = pick_choice( "Select a MIDI port to send to:",
                                  port_choices, port_choices.size() - 1 );
 
+    cout << endl;
+
     if( output_port_i == (int)output_port_count + 1 )
       throw_exception( "No output port selected." );
   }  
 
   
-  if( output_port_i < (int)output_port_count )
+  if( output_port_i < (int)output_port_count ) {
     _midi_out->openPort( output_port_i, _our_output_port_name );
-  else
+    cout << "Sending to port " << port_choices[output_port_i].description
+         << endl;
+  }
+  else {
     _midi_out->openVirtualPort( _our_output_port_name );
+    cout << "Opened port \"" << _our_output_port_name
+         << "\" for other devices to connect to" << endl;
+  }
 
-  cout << "Sending to port " << port_choices[output_port_i].description
-       << endl;
+  cout << endl;
 }
 
 RtMidiClient::~RtMidiClient() {

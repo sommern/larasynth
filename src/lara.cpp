@@ -192,6 +192,8 @@ void perform( const string& directory_name, bool verbose ) {
   if( choice_i >= results_filenames.size() )
     exit( EXIT_FAILURE );
 
+  cout << endl;
+
   try {
     TrainingResults results( results_filenames[choice_i], READ_RESULTS );
 
