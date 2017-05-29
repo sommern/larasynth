@@ -28,9 +28,9 @@ LstmUnitProperties::LstmUnitProperties( Id_t id, lstm_unit_t type,
                                           vector<LstmGatedConn> gated_conns )
   : _id( id )
   , _type( type )
+  , _gated_conns( gated_conns )
   , _act_func_type( act_func_type )
   , _self_conn_gater( self_conn_gater )
-  , _gated_conns( gated_conns )
 {
   set_act_func( act_func_type );
 }
