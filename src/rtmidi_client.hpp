@@ -67,8 +67,11 @@ private:
 
   std::string _client_name;
 
-  std::string _input_port_name;
-  std::string _output_port_name;
+  std::string _our_input_port_name;
+  std::string _our_output_port_name;
+
+  std::string _their_output_port_name;
+  std::string _their_input_port_name;
 
   EventQueue _input_queue;
   
