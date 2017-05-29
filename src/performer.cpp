@@ -26,11 +26,13 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
                       MidiConfig& midi_config,
                       RepresentationConfig& repr_config,
                       MidiMinMax& min_max,
-                      volatile sig_atomic_t* shutdown_flag )
+                      volatile sig_atomic_t* shutdown_flag, bool verbose )
   : _midi_client( midi_client )
   , _network( network )
   , _midi_state( midi_config.get_ctrl_defaults() )
   , _ctrls( midi_config.get_ctrls() )
+  , _shutdown_flag( shutdown_flag )
+  , _verbose( verbose )
 {
   MidiTranslator translator( repr_config.get_ctrl_output_counts(),
                              repr_config.get_input_feature_config(),
@@ -55,7 +57,7 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
 
   translator.fill_target( net_output );
 
-  while( !*shutdown_flag ) {
+  while( !*_shutdown_flag ) {
     while( _midi_client->has_input_event() ) {
       event = _midi_client->get_input_event();
 
@@ -77,14 +79,12 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
 
     if( current_microseconds() < next_update_time ) {
       usleep(1);
-      continue;
     }
-
-    next_update_time = current_microseconds() + period;
-
-    new_ctrl_vals = get_ctrl_values_from_network( translator );
-
-    set_ctrls( current_ctrl_vals, new_ctrl_vals );
+    else {
+      next_update_time = current_microseconds() + period;
+      new_ctrl_vals = get_ctrl_values_from_network( translator );
+      set_ctrls( current_ctrl_vals, new_ctrl_vals );
+    }
   }
 
   cout << endl << "Shutting down." << endl;
@@ -115,6 +115,16 @@ void Performer::play_notes( deque<Event*>& notes_to_play ) {
   while( !notes_to_play.empty() ) {
     Event* note = notes_to_play.front();
     _midi_client->send_event( note );
+
+    if( _verbose ) {
+      cout << "note " << (unsigned int)note->pitch();
+
+      if( note->type() == NOTE_ON && note->velocity() != 0 )
+        cout << " on" << endl;
+      else
+        cout << " off" << endl;
+    }
+
     _midi_client->return_input_event( note );
     notes_to_play.pop_front();
   }
@@ -130,8 +140,10 @@ Performer::set_ctrls( unordered_map<event_data_t,event_data_t>& old_vals,
       old_vals[ctrl] = new_vals[ctrl];
       ctrl_event.set_ctrl( 0, ctrl, new_vals[ctrl], 0 );
       _midi_client->send_event( &ctrl_event );
-      cout << "set controller " << (unsigned int)ctrl << " to "
-           << (unsigned int)new_vals[ctrl] << endl;
+      if( _verbose ) {
+        cout << "set controller " << (unsigned int)ctrl << " to "
+             << (unsigned int)new_vals[ctrl] << endl;
+      }
     }
   }
 }

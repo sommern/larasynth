@@ -40,7 +40,8 @@ class Performer {
 public:
   Performer( MidiClient* midi_client, LstmNetwork& network,
              MidiConfig& midi_config, RepresentationConfig& repr_config,
-             MidiMinMax& min_max, volatile sig_atomic_t* shutdown_flag );
+             MidiMinMax& min_max, volatile sig_atomic_t* shutdown_flag,
+             bool verbose );
 
 private:
   ctrl_values_t get_ctrl_values_from_network( MidiTranslator& translator );
@@ -61,6 +62,8 @@ private:
   std::vector<double> _net_input;
 
   volatile sig_atomic_t* _shutdown_flag;
+
+  bool _verbose;
 };
 
 }
