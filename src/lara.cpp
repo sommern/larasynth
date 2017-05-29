@@ -162,12 +162,23 @@ void perform( const string& directory_name ) {
   vector<ip_choice_t> choices;
 
   int choice_number = 1;
-  for( auto& filename : results_filenames ) {
+  for( string filename : results_filenames ) {
+    size_t last_slash_i = filename.find_last_of( "/" );
+
+    string display_filename;
+
+    if( last_slash_i != string::npos ) {
+      display_filename = filename.substr( last_slash_i + 1 );
+    }
+    else {
+      display_filename = filename;
+    }
+
     training_results.emplace_back( filename, READ_RESULTS );
 
     ostringstream description;
     description << "MSE: " << training_results.back().get_mse() << " - "
-                << filename;
+                << display_filename;
 
     choices.emplace_back( to_string( choice_number ), description.str() );
     ++choice_number;
