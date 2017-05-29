@@ -46,7 +46,8 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
 
   size_t period = MICROSECONDS_PER_SECOND / repr_config.get_update_rate();
 
-  cout << "Update interval: " << period << " microseconds" << endl;
+  cout << "Performing with an update interval of " << period << " microseconds"
+       << endl;
 
   size_t next_update_time = 0;
 
