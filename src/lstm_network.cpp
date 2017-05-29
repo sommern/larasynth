@@ -127,8 +127,7 @@ LstmNetwork::LstmNetwork( size_t input_count,
     }
   }
 
-  // bias activation is always 1.0
-  _activations[_input_count] = 1.0;
+  _activations[_bias_id] = 1.0;
 }
 
 void LstmNetwork::feed_forward( const vector<double>& input ) {
@@ -182,13 +181,13 @@ void LstmNetwork::zero_network() {
   }
 
   // return bias activation to 1.0
-  _activations[_input_count] = 1.0;
+  _activations[_bias_id] = 1.0;
 }
 
 map<Id_t, double> LstmNetwork::get_cell_states() {
   map<Id_t, double> cell_states;
 
-  Id_t first_id = _input_count + 1;
+  Id_t first_id = _bias_id + 1;
 
   for( Id_t id = first_id; id < _unit_count; ++id ) {
     if( _self_conn[id] )
@@ -207,9 +206,7 @@ void LstmNetwork::calculate_activations() {
   for( size_t i = 0; i < _right_term_sums.size(); ++i )
     fill( _right_term_sums[i].begin(), _right_term_sums[i].end(), 0.0 );
 
-  // the first _input_count units are input units whose activations are already
-  // defined. the next unit is the bias unit whose activation is always 1.
-  Id_t first_id = _input_count + 1;
+  Id_t first_id = _bias_id + 1;
 
   for( Id_t id = first_id; id < _unit_count; ++id ) {
     double sum = 0.0;
@@ -270,7 +267,7 @@ void LstmNetwork::calculate_activations() {
 }
 
 void LstmNetwork::calculate_extended_eligibility_traces() {
-  for( Id_t j = _input_count; j < _gated_sets.size(); ++j ) {
+  for( Id_t j = _bias_id; j < _gated_sets.size(); ++j ) {
     if( _gated_sets[j].size() == 0 )
       continue;
 
@@ -303,7 +300,7 @@ void LstmNetwork::calculate_error_responsibilities() {
     _error_resps[out_id] = _target[i] - _activations[out_id];
   }
 
-  for( Id_t id = _first_output_id - 1; id > _input_count; --id ) {
+  for( Id_t id = _first_output_id - 1; id > _bias_id; --id ) {
     double derivative = _act_func_derivatives[id]( _activations[id] );
     double sum = 0.0;
 
@@ -337,7 +334,7 @@ void LstmNetwork::calculate_error_responsibilities() {
 
 void LstmNetwork::update_weights( const double learning_rate,
                                    const double momentum ) {
-  Id_t first_id = _input_count + 1;
+  Id_t first_id = _bias_id + 1;
   for( Id_t id = first_id; id < _unit_count; ++id ) {
     for( Index_t in_i = 0; in_i < _incoming_conns[id].size(); ++in_i ) {
       Id_t in_id = _incoming_conns[id][in_i];
