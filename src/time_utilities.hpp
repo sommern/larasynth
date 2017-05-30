@@ -27,6 +27,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 namespace larasynth {
 
 static const size_t MICROSECONDS_PER_SECOND = 1000000;
+static const size_t MICROSECONDS_PER_MILLISECOND = 1000;
 
 /**
  * Get the current microseconds from the steady clock. This is not in wall
@@ -78,5 +79,34 @@ inline std::string get_timestamp_string() {
 
   return oss.str();
 }
+
+/**
+ * 
+ */
+class Timer {
+public:
+  Timer() {
+    start();
+  }
+
+  inline void start() { _begin = current_microseconds(); }
+
+  inline size_t get_elapsed_microseconds() {
+    return current_microseconds() - _begin;
+  }
+
+  inline double get_elapsed_milliseconds() {
+    size_t elapsed = get_elapsed_microseconds();
+    return (double)elapsed / MICROSECONDS_PER_MILLISECOND;
+  }
+  
+  inline double get_elapsed_seconds() {
+    size_t elapsed = get_elapsed_microseconds();
+    return (double)elapsed / MICROSECONDS_PER_SECOND;
+  }
+
+private:
+  size_t _begin;
+};
 
 }

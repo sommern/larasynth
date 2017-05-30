@@ -27,7 +27,6 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include "lstm_types.hpp"
 #include "lstm_result.hpp"
 #include "training_event_stream.hpp"
-#include "timer.hpp"
 #include "midi_types.hpp"
 #include "midi_translator.hpp"
 
