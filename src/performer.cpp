@@ -63,6 +63,10 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
       event = _midi_client->get_input_event();
 
       if( event->type() == NOTE_ON || event->type() == NOTE_OFF ) {
+        if( _verbose ) {
+          _timers[event] = Timer();
+        }
+
         notes_to_play.push_back( event );
         translator.report_note_event( event );
         new_ctrl_vals = get_ctrl_values_from_network( translator );
@@ -118,12 +122,17 @@ void Performer::play_notes( deque<Event*>& notes_to_play ) {
     _midi_client->send_event( note );
 
     if( _verbose ) {
+      double latency = _timers[note].get_elapsed_milliseconds();
+      _timers.erase( note );
+
       cout << "note " << (unsigned int)note->pitch();
 
       if( note->type() == NOTE_ON && note->velocity() != 0 )
         cout << " on" << endl;
       else
         cout << " off" << endl;
+
+      cout << "Latency: " << latency << " ms" << endl;
     }
 
     _midi_client->return_input_event( note );

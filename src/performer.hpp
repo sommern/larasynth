@@ -21,6 +21,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 #include <deque>
+#include <unordered_map>
 #include <algorithm>
 #include <csignal>
 #include <unistd.h>
@@ -64,6 +65,7 @@ private:
   volatile sig_atomic_t* _shutdown_flag;
 
   bool _verbose;
+  std::unordered_map<Event*, Timer> _timers;
 };
 
 }
