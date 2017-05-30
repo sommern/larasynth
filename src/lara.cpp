@@ -35,13 +35,14 @@ void print_usage_and_exit( int argc, char** argv ) {
   cerr << "Usage: " << argv[0]
        << " <project directory> <action>" << endl << endl
        << "Actions:" << endl << endl
-       << "  config               - create the project directory if it does not exist and" << endl
-       << "                         create a larasynth.conf file in the project directory" << endl
-       << "  record               - record a training example via a MIDI port" << endl
-       << "  read <MIDI filename> - create a training example from a MIDI file" << endl
-       << "  train                - train a model using the current training example(s)" << endl
-       << "  perform [-v]         - use one of the trained models to control a" << endl
-       << "                         synthesizer's continuous controllers during performance" << endl;
+       << " config                 - create the project directory if it does not exist and" << endl
+       << "                          create a larasynth.conf file in the project directory" << endl
+       << " record                 - record a training example via a MIDI port" << endl
+       << " import <MIDI filename> - create a training example from a MIDI file" << endl
+       << " train                  - train a model using the current training example(s)" << endl
+       << " perform [-v]           - use one of the trained models to control a" << endl
+       << "                          synthesizer's continuous controllers during" << endl
+       << "                          performance" << endl;
   exit( EXIT_FAILURE );
 }
 
@@ -106,9 +107,9 @@ void record( const string& directory_name ) {
 }
 
 /**
- * Read a training example from a MIDI file.
+ * Import a training example from a MIDI file.
  */
-void read( const string& directory_name, const string& midi_filename ) {
+void import( const string& directory_name, const string& midi_filename ) {
   ConfigDirectory dir( directory_name );
   dir.process_directory();
 
@@ -233,7 +234,7 @@ int main( int argc, char** argv ) {
   map< string, vector<int> > action_argc = {
     { "config", { 3 } },
     { "record", { 3 } },
-    { "read", { 4 } },
+    { "import", { 4 } },
     { "train", { 3 } },
     { "perform", { 3, 4 } }
   };
@@ -257,9 +258,9 @@ int main( int argc, char** argv ) {
     else if( action == "record" ) {
       record( directory_name );
     }
-    else if( action == "read" ) {
+    else if( action == "import" ) {
       string midi_filename = argv[3];
-      read( directory_name, midi_filename );
+      import( directory_name, midi_filename );
     }
     else if( action == "train" ) {
       train( directory_name );
