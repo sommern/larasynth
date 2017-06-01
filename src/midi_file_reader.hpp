@@ -20,6 +20,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <iostream>
+#include <algorithm>
 
 #include "midi_types.hpp"
 #include "event.hpp"
