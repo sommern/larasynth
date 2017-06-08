@@ -52,6 +52,7 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
   size_t next_update_time = 0;
 
   deque<Event*> notes_to_play;
+  deque<Event*> events_to_forward;
 
   _net_input = vector<double>( _network.get_input_size(), 0.0 );
   vector<Real_t> net_output( _network.get_output_size(), 0.0 );
@@ -71,8 +72,16 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
         translator.report_note_event( event );
         new_ctrl_vals = get_ctrl_values_from_network( translator );
       }
-      else
+      // an event that is not a note event, and not one of the controllers
+      // larasynth is controlling, should be forwarded on
+      else if( !( event->type() == CTRL_CHANGE &&
+                  find( _ctrls.begin(), _ctrls.end(), event->controller() )
+                  != _ctrls.end() ) ) {
+        events_to_forward.push_back( event );
+      }
+      else {
         _midi_client->return_input_event( event );
+      }
     }
 
     if( !notes_to_play.empty() ) {
@@ -80,6 +89,10 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
 
       set_ctrls( current_ctrl_vals, new_ctrl_vals );
       play_notes( notes_to_play );
+    }
+
+    if( !events_to_forward.empty() ) {
+      forward_events( events_to_forward );
     }
 
     if( current_microseconds() < next_update_time ) {
@@ -137,6 +150,15 @@ void Performer::play_notes( deque<Event*>& notes_to_play ) {
 
     _midi_client->return_input_event( note );
     notes_to_play.pop_front();
+  }
+}
+
+void Performer::forward_events( deque<Event*>& events_to_forward ) {
+  while( !events_to_forward.empty() ) {
+    Event* event = events_to_forward.front();
+    _midi_client->send_event( event );
+    _midi_client->return_input_event( event );
+    events_to_forward.pop_front();
   }
 }
 

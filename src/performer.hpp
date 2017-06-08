@@ -48,6 +48,7 @@ private:
   ctrl_values_t get_ctrl_values_from_network( MidiTranslator& translator );
   void set_ctrls( ctrl_values_t& old_vals, ctrl_values_t& new_vals );
   void play_notes( std::deque<Event*>& notes_to_play );
+  void forward_events( std::deque<Event*>& events_to_forward );
 
   void return_events( std::deque<Event*>& events );
 
