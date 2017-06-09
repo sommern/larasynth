@@ -22,10 +22,19 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 using namespace std;
 using namespace larasynth;
 
+LstmUnitProperties::LstmUnitProperties( Id_t id, lstm_unit_t type )
+  : _id( id )
+  , _type( type )
+  , _act_func_type( IDENTITY )
+  , _act_func (identity)
+  , _act_func_derivative( identity_derivative )
+  ,  _self_conn_gater( NO_UNIT ) {}
+
+
 LstmUnitProperties::LstmUnitProperties( Id_t id, lstm_unit_t type,
-                                          lstm_act_func_t act_func_type,
-                                          Id_t self_conn_gater,
-                                          vector<LstmGatedConn> gated_conns )
+                                        lstm_act_func_t act_func_type,
+                                        Id_t self_conn_gater,
+                                        vector<LstmGatedConn> gated_conns )
   : _id( id )
   , _type( type )
   , _gated_conns( gated_conns )

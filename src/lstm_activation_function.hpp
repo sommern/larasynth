@@ -25,6 +25,14 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace larasynth {
 
+inline Real_t identity( Real_t x ) {
+  return x;
+}
+    
+inline Real_t identity_derivative( Real_t x ) {
+  return 1.0;
+}
+
 inline Real_t logistic( Real_t x )
 {
   return ( 1.0 / ( 1.0 + exp( x * -1.0 ) ) );

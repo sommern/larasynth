@@ -54,7 +54,7 @@ size_t pick_choice( const string& question,
 
   do {
     cout << "Enter your choice";
-    if( default_choice >= 0 && default_choice < choices.size() )
+    if( default_choice >= 0 && default_choice < (int)choices.size() )
       cout << " [" << choices[default_choice].choice_input << "]";
     cout << ": ";
 
@@ -67,7 +67,7 @@ size_t pick_choice( const string& question,
     }
 
     if( response == "" &&
-        default_choice >= 0 && default_choice < choices.size() )
+        default_choice >= 0 && default_choice < (int)choices.size() )
       response = choices[default_choice].choice_input;
 
     for( size_t i = 0; i < choices.size(); ++i ) {

@@ -30,11 +30,10 @@ namespace larasynth {
 
 class LstmUnitProperties {
 public:
-  LstmUnitProperties( Id_t id, lstm_unit_t type )
-    : _id( id ), _type( type ), _self_conn_gater( NO_UNIT ) {}
+  LstmUnitProperties( Id_t id, lstm_unit_t type );
   LstmUnitProperties( Id_t id, lstm_unit_t type,
-                       lstm_act_func_t act_func_type, Id_t self_conn_gater,
-                       std::vector<LstmGatedConn> gated_conns );
+                      lstm_act_func_t act_func_type, Id_t self_conn_gater,
+                      std::vector<LstmGatedConn> gated_conns );
 
   void print();
 

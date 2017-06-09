@@ -44,7 +44,7 @@ MidiFileReader::MidiFileReader( const string& midi_filename,
 
   Event event_to_write;
 
-  for( size_t event_i = 0; event_i < event_list.size(); ++event_i ) {
+  for( size_t event_i = 0; (int)event_i < event_list.size(); ++event_i ) {
     MidiMessage& file_event = event_list[event_i];
 
     // convert time to microseconds
