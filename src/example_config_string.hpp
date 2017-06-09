@@ -137,6 +137,16 @@ max_epoch_count = 3000
 # If the mean squared error for each time step reaches this threshold, then
 # training will stop
 mse_threshold = 0.0
-)";
 
+
+# The [performing] section is optional and is only read when performing.
+
+# [performing]
+
+# Specifies the training results file that contains the network to use for
+# performance. Replace with the name of the results file you want to use. If
+# this is not defined you will be presented with a choice of results files when
+# performing.
+# training_results = \"results-2017-05-29-10:56:45.763129.json\"
+)";
 }

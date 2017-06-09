@@ -17,6 +17,7 @@
 #include "midi_config.hpp"
 #include "rtmidi_client.hpp"
 #include "representation_config.hpp"
+#include "performing_config.hpp"
 #include "recorder.hpp"
 #include "trainer.hpp"
 #include "performer.hpp"
@@ -153,50 +154,77 @@ void perform( const string& directory_name, bool verbose ) {
   ConfigParameters lstm_params = cp.get_section_params( "lstm" );
   ConfigParameters seq_params = cp.get_section_params( "representation" );
   ConfigParameters midi_params = cp.get_section_params( "midi" );
+  ConfigParameters perform_params = cp.get_section_params( "performing" );
+
+  PerformingConfig perform_config( perform_params );
 
   MidiConfig midi_config( midi_params );
 
   vector<string> results_filenames = dir.get_training_results_filenames();
 
-  vector<TrainingResults> training_results;
+  map<string, string> filenames_by_display_filename;
 
-  vector<ip_choice_t> choices;
+  for( string& filename : results_filenames ) {
+      size_t last_slash_i = filename.find_last_of( "/" );
 
-  int choice_number = 1;
-  for( string filename : results_filenames ) {
-    size_t last_slash_i = filename.find_last_of( "/" );
+      string display_filename;
 
-    string display_filename;
+      if( last_slash_i != string::npos ) {
+        display_filename = filename.substr( last_slash_i + 1 );
+      }
+      else {
+        display_filename = filename;
+      }
 
-    if( last_slash_i != string::npos ) {
-      display_filename = filename.substr( last_slash_i + 1 );
-    }
-    else {
-      display_filename = filename;
-    }
-
-    training_results.emplace_back( filename, READ_RESULTS );
-
-    ostringstream description;
-    description << "MSE: " << training_results.back().get_mse() << " - "
-                << display_filename;
-
-    choices.emplace_back( to_string( choice_number ), description.str() );
-    ++choice_number;
+      filenames_by_display_filename[display_filename] = filename;
   }
+
+  string results_filename = perform_config.get_training_results_filename();
+
+  if( results_filename != "" ) {
+    if( filenames_by_display_filename.count( results_filename ) == 0 ) {
+      cout << "Configuration error: " << results_filename << " does not exist."
+           << endl;
+      exit( EXIT_FAILURE );
+    }
+
+    results_filename = filenames_by_display_filename[results_filename];
+  }
+  else {
+    vector<TrainingResults> training_results;
+
+    vector<ip_choice_t> choices;
+
+    int choice_number = 1;
+    for( auto& kv : filenames_by_display_filename ) {
+      string display_filename = kv.first;
+      string filename = kv.second;
+
+      training_results.emplace_back( filename, READ_RESULTS );
+
+      ostringstream description;
+      description << "MSE: " << training_results.back().get_mse() << " - "
+                  << display_filename;
+
+      choices.emplace_back( to_string( choice_number ), description.str() );
+      ++choice_number;
+    }
   
-  choices.emplace_back( "q", "quit" );
+    choices.emplace_back( "q", "quit" );
 
-  size_t choice_i = pick_choice( "Pick from the following training results:",
-                                 choices );
+    size_t choice_i = pick_choice( "Pick from the following training results:",
+                                   choices );
 
-  if( choice_i >= results_filenames.size() )
-    exit( EXIT_FAILURE );
+    if( choice_i >= results_filenames.size() )
+      exit( EXIT_FAILURE );
 
-  cout << endl;
+    results_filename = results_filenames[choice_i];
+
+    cout << endl;
+  }
 
   try {
-    TrainingResults results( results_filenames[choice_i], READ_RESULTS );
+    TrainingResults results( results_filename, READ_RESULTS );
 
     MidiMinMax min_max = results.get_min_max();
 
@@ -213,7 +241,7 @@ void perform( const string& directory_name, bool verbose ) {
                  &lara_shutdown_flag, verbose );
   }
   catch( const TrainingResultsException& e ) {
-    cerr << "Error reading " << results_filenames[choice_i] << endl
+    cerr << "Error reading " << results_filename << endl
          << "Please choose a different file or re-train" << endl;
   }
 }
