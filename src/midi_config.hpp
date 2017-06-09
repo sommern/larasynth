@@ -60,12 +60,6 @@ public:
   { return _ctrl_defaults[ctrl]; }
 
 private:
-  void setup_reserved_strings();
-  void setup_numeric_parameters();
-
-  bool parse_file();
-  bool parse_controllers();
-  bool parse_quoted_string_param( const std::string& name, std::string& val );
 
   std::string _recording_source_port;
   std::string _performing_source_port;
