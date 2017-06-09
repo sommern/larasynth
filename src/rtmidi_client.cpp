@@ -26,7 +26,9 @@ RtMidiClient::RtMidiClient(  const string& client_name,
                              const string& their_output_port_name,
                              const string& their_input_port_name,
                              run_mode mode )
-  : _client_name( client_name )
+  : _midi_in( nullptr )
+  , _midi_out( nullptr )
+  ,_client_name( client_name )
   , _our_input_port_name( client_name + " input" )
   , _our_output_port_name( client_name + " output" )
   , _their_output_port_name( their_output_port_name )
@@ -150,8 +152,11 @@ RtMidiClient::~RtMidiClient() {
 }  
 
 void RtMidiClient::throw_exception( string error_msg ) {
-  delete _midi_in;
-  delete _midi_out;
+  if( _midi_in != nullptr )
+    delete _midi_in;
+  if( _midi_out != nullptr )
+    delete _midi_out;
+
   throw MidiException( error_msg );
 }
 

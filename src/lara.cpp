@@ -244,6 +244,9 @@ void perform( const string& directory_name, bool verbose ) {
     cerr << "Error reading " << results_filename << endl
          << "Please choose a different file or re-train" << endl;
   }
+  catch( const MidiException& e ) {
+    cerr << "Midi client error: " << e.what() << endl;
+  }
 }
 
 /**
