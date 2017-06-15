@@ -185,3 +185,11 @@ midi_file_reader_test_LDADD += $(top_srcdir)/src/midifile/Options.o
 midi_file_reader_test_LDADD += $(top_srcdir)/src/midifile/MidiEvent.o
 midi_file_reader_test_LDADD += $(top_srcdir)/src/midi_file_reader.o
 midi_file_reader_test_LDADD += $(top_srcdir)/src/event.o
+
+TESTS += lstm_network_test
+check_PROGRAMS += lstm_network_test
+lstm_network_test_SOURCES = lstm_network_test.cpp
+lstm_network_test_LDADD = $(top_srcdir)/src/littlelstm/lstm_network.o
+lstm_network_test_LDADD += $(top_srcdir)/src/littlelstm/lstm_architecture.o
+lstm_network_test_LDADD += $(top_srcdir)/src/littlelstm/lstm_unit_properties.o
+lstm_network_test_LDADD += $(top_srcdir)/src/littlelstm/lstm_layer_config.o

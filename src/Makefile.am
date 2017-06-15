@@ -30,6 +30,7 @@ json/json.hpp \
 lara.cpp \
 lexer.cpp \
 lexer.hpp \
+littlelstm/lstm_network.cpp \
 lock_free_queue.hpp \
 lstm_activation_function.hpp \
 lstm_architecture.cpp \
