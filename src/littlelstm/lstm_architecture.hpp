@@ -31,14 +31,15 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace littlelstm {
 
+static const size_t UNITS_PER_BLOCK = 4;
+
 /**
  * This class builds an architecture for an LSTM network.
  */
 class LstmArchitecture {
 public:
   LstmArchitecture( size_t input_count, size_t output_count,
-                    std::vector<size_t> block_counts,
-                    std::vector<size_t> cells_per_block );
+                    std::vector<size_t> block_counts );
 
   size_t get_unit_count() const { return _unit_count; }
   size_t get_input_count() const { return _input_count; }
@@ -80,8 +81,7 @@ private:
   std::vector< std::vector<Id_t> > _forget_gate_ids;
   std::vector< std::vector<Id_t> > _output_gate_ids;
   std::vector< std::vector<Id_t> > _all_gate_ids;
-  std::vector< std::vector< std::vector<Id_t> > > _block_cell_ids;
-  std::vector< std::vector<Id_t> > _all_cell_ids;
+  std::vector< std::vector<Id_t> > _cell_ids;
   std::vector<Id_t> _output_ids;
 
   // units that connect to cells and units that cells connect to, for gating
