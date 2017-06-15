@@ -80,7 +80,7 @@ size_t argmax( vector<double> v ) {
  * Ensure we can create a network at all.
  */
 TEST( LstmNetworkTest, CreateNetwork ) {
-  LstmArchitecture arch( 3, 1, { 21 }, { 2 } );
+  LstmArchitecture arch( 3, 1, { 21 } );
   LstmNetwork network( arch );
 
   ASSERT_EQ( 3, network.get_input_size() );
@@ -91,7 +91,7 @@ TEST( LstmNetworkTest, CreateNetwork ) {
  * Ensure we can feed forward and get output.
  */
 TEST( LstmNetworkTest, FeedForward ) {
-  LstmArchitecture arch( 3, 1, { 21 }, { 1 } );
+  LstmArchitecture arch( 3, 1, { 21 } );
   LstmNetwork network( arch );
 
   vector<double> input = { 1, 0, 0 };
@@ -108,7 +108,7 @@ TEST( LstmNetworkTest, FeedForward ) {
  * is alwasy larger than the second value.
  */
 TEST( LstmNetworkTest, LearnAlwaysFirst ) {
-  LstmArchitecture arch( 3, 2, { 21 }, { 2 } );
+  LstmArchitecture arch( 3, 2, { 3, 5 } );
   LstmNetwork network( arch );
 
   RandGen rand;
@@ -165,7 +165,7 @@ TEST( LstmNetworkTest, LearnAlwaysFirst ) {
  * {0, 0, 1}
  */
 TEST( LstmNetworkTest, LearnOneTwoThree ) {
-  LstmArchitecture arch( 3, 2, { 3 }, { 1 } );
+  LstmArchitecture arch( 3, 2, { 3 } );
   LstmNetwork network( arch );
 
   RandGen rand;

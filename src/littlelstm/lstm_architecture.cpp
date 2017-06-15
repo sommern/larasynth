@@ -23,8 +23,7 @@ using namespace std;
 using namespace littlelstm;
 
 LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
-                                    vector<size_t> block_counts,
-                                    vector<size_t> cells_per_block )
+                                    vector<size_t> block_counts )
   : _input_count( input_count ),
     _output_count( output_count ),
     _next_id( 0 )
@@ -34,10 +33,7 @@ LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
   _unit_count = _input_count + _output_count + 1;
   for( size_t h = 0; h < hidden_layer_count; ++h ) {
     for( size_t b = 0; b < block_counts[h]; ++b ) {
-      _unit_count += 3;
-      for( size_t c = 0; c < cells_per_block[h]; ++c ) {
-        _unit_count += 1;
-      }
+      _unit_count += UNITS_PER_BLOCK;
     }
   }
 
@@ -61,8 +57,7 @@ LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
     _forget_gate_ids.push_back( vector<Id_t>() );
     _output_gate_ids.push_back( vector<Id_t>() );
     _all_gate_ids.push_back( vector<Id_t>() );
-    _block_cell_ids.push_back( vector< vector<Id_t> >() );
-    _all_cell_ids.push_back( vector<Id_t>() );
+    _cell_ids.push_back( vector<Id_t>() );
 
     for( size_t b = 0; b < block_counts[h]; ++b ) {
       _input_gate_ids[h].push_back( add_unit( INPUT_GATE, LOGISTIC ) );
@@ -73,15 +68,10 @@ LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
       _all_gate_ids[h].push_back( _forget_gate_ids[h].back() );
       _all_gate_ids[h].push_back( _output_gate_ids[h].back() );
 
-      _block_cell_ids[h].push_back( vector<Id_t>() );
-
-      for( size_t c = 0; c < cells_per_block[h]; ++c ) {
-        Id_t cell_id = add_unit( CELL, LOGISTIC );
-        _block_cell_ids[h][b].push_back( cell_id );
-        _all_cell_ids[h].push_back( cell_id );
-        _gated_cell_inputs[cell_id] = vector<Id_t>();
-        _gated_cell_outputs[cell_id] = vector<Id_t>();
-      }
+      Id_t cell_id = add_unit( CELL, LOGISTIC );
+      _cell_ids[h].push_back( cell_id );
+      _gated_cell_inputs[cell_id] = vector<Id_t>();
+      _gated_cell_outputs[cell_id] = vector<Id_t>();
     }
   }
 
@@ -112,7 +102,7 @@ LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
       }
       if( connection_needed( INPUT_LAYER_ID, h_id, INPUT_UNIT,
                                     CELL ) ) {
-        for( auto& out_id : _all_cell_ids[h] ) {
+        for( auto& out_id : _cell_ids[h] ) {
           add_connection( in_id, out_id );
           _gated_cell_inputs[out_id].push_back( in_id );
         }
@@ -140,7 +130,7 @@ LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
         add_connection( bias_id, out_id );
     }
     if( connection_needed( BIAS_LAYER_ID, h_id, BIAS_UNIT, CELL ) ) {
-      for( auto& out_id : _all_cell_ids[h] ) {
+      for( auto& out_id : _cell_ids[h] ) {
         add_connection( bias_id, out_id );
         _gated_cell_inputs[out_id].push_back( bias_id );
       }
@@ -199,7 +189,7 @@ LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
 
       const vector<Id_t> out_ids = get_layer_ids_by_type( h, out_type );
 
-      for( auto& in_id : _all_cell_ids[h] ) {
+      for( auto& in_id : _cell_ids[h] ) {
         for( auto& out_id : out_ids ) {
           if( in_id != out_id )
             add_connection( in_id, out_id );
@@ -225,7 +215,7 @@ LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
 
       const vector<Id_t> out_ids = get_layer_ids_by_type( h_out, out_type );
 
-      for( auto& in_id : _all_cell_ids[h_in] ) {
+      for( auto& in_id : _cell_ids[h_in] ) {
         for( auto& out_id : out_ids ) {
           add_connection( in_id, out_id );
           _gated_cell_outputs[in_id].push_back( out_id );
@@ -246,7 +236,7 @@ LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
                                    OUTPUT_UNIT ) )
       continue;
     
-    for( auto& in_id : _all_cell_ids[h] ) {
+    for( auto& in_id : _cell_ids[h] ) {
       for( auto& out_id : _output_ids ) {
         add_connection( in_id, out_id );
         _gated_cell_outputs[in_id].push_back( out_id );
@@ -261,19 +251,17 @@ LstmArchitecture::LstmArchitecture( size_t input_count, size_t output_count,
       Id_t forget_gate_id = _forget_gate_ids[h][b];
       Id_t output_gate_id = _output_gate_ids[h][b];
 
-      for( Index_t c = 0; c < cells_per_block[h]; ++c ) {
-        Id_t cell_id = _block_cell_ids[h][b][c];
+      Id_t cell_id = _cell_ids[h][b];
 
-        add_self_gate( cell_id, forget_gate_id );
+      add_self_gate( cell_id, forget_gate_id );
 
-        for( auto& in_id : _gated_cell_inputs[cell_id] ) {
-          // cout << "gate " << input_gate_id << " gating " << in_id << " -> "
-          //      << cell_id << endl;
-          add_gate( in_id, cell_id, input_gate_id );
-        }
-        for( auto& out_id : _gated_cell_outputs[cell_id] )
-          add_gate( cell_id, out_id, output_gate_id );
+      for( auto& in_id : _gated_cell_inputs[cell_id] ) {
+        // cout << "gate " << input_gate_id << " gating " << in_id << " -> "
+        //      << cell_id << endl;
+        add_gate( in_id, cell_id, input_gate_id );
       }
+      for( auto& out_id : _gated_cell_outputs[cell_id] )
+        add_gate( cell_id, out_id, output_gate_id );
     }
   }
 
@@ -318,7 +306,7 @@ vector<Id_t> LstmArchitecture::get_layer_ids_by_type( Index_t h,
     return _output_gate_ids[h];
     break;
   case CELL:
-    return _all_cell_ids[h];
+    return _cell_ids[h];
     break;
   default:
     assert( false );
