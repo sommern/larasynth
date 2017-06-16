@@ -28,15 +28,17 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include "lstm_config.hpp"
 #include "representation_config.hpp"
 #include "training_config.hpp"
-#include "lstm_network.hpp"
+#include "littlelstm/lstm_network.hpp"
 #include "midi_min_max.hpp"
 #include "filesystem_operations.hpp"
 #include "lstm_result.hpp"
 #include "debug.hpp"
-#include "lstm_types.hpp"
-#include "lstm_architecture.hpp"
-#include "lstm_unit_properties.hpp"
+#include "littlelstm/lstm_types.hpp"
+#include "littlelstm/lstm_architecture.hpp"
+#include "littlelstm/lstm_unit_properties.hpp"
 #include "json/json.hpp"
+#include "littlelstm/json_importer.hpp"
+#include "littlelstm/json_exporter.hpp"
 
 namespace larasynth {
 
@@ -62,16 +64,16 @@ public:
   std::string get_filename() { return _filename; }
 
   double get_mse() { return _json["mse"]; }
-  WeightsMap_t get_weights();
+  littlelstm::WeightsMap_t get_weights();
   std::vector< std::pair<Id_t,Id_t> > get_connections();
-  std::vector<LstmUnitProperties> get_units_properties();
+  std::vector<littlelstm::LstmUnitProperties> get_units_properties();
   MidiMinMax get_min_max();
-  LstmNetwork get_trained_network();
+  littlelstm::LstmNetwork get_trained_network();
   RepresentationConfig get_repr_config();
 
   void add_result( const LstmResult& result );
-  void add_weights( const WeightsMap_t& weights );
-  void add_architecture( const LstmArchitecture& arch );
+  void add_weights( const littlelstm::WeightsMap_t& weights );
+  void add_network( const littlelstm::LstmNetwork& net );
   void add_min_max( const MidiMinMax& min_max );
   void add_lstm_config( const LstmConfig& lstm_config );
   void add_repr_config( const RepresentationConfig& repr_config );
@@ -83,15 +85,18 @@ public:
   void add_connections( const std::vector< std::pair<Id_t, Id_t> >&
                         connections );
 private:
-  void add_units_properties( const std::vector<LstmUnitProperties>&
+  void add_units_properties( const std::vector<littlelstm::LstmUnitProperties>&
                              units_properties );
-  void add_gated_conns( const std::vector<LstmGatedConn>& conns );
-  std::unordered_map<Id_t, std::vector<LstmGatedConn> > get_all_gated_conns();
+  void add_gated_conns( const std::vector<littlelstm::LstmGatedConn>& conns );
+  std::unordered_map<Id_t, std::vector<littlelstm::LstmGatedConn> >
+  get_all_gated_conns();
 
   std::string _filename;
 
   training_results_mode _mode;
 
+  littlelstm::JsonImporter _importer;
+  littlelstm::JsonExporter _exporter;
   nlohmann::json _json;
 };
 

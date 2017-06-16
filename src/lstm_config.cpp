@@ -21,6 +21,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 using namespace larasynth;
+using namespace littlelstm;
 
 LstmConfig::LstmConfig( ConfigParameters& params ) {
   unordered_map<string,pair<double*,double> > optional_doubles = {

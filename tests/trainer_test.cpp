@@ -6,6 +6,7 @@
 
 using namespace std;
 using namespace larasynth;
+using namespace littlelstm;
 
 TEST( LstmTrainerTest, SimpleSequence ) {
   string directory = "test_files/trainer_test";

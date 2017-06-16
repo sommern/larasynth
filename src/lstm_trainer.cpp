@@ -22,12 +22,12 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 using namespace std;
 using namespace larasynth;
 
-LstmTrainer::LstmTrainer(  LstmNetwork& untrained_network,
-                             TrainingEventStream& training_stream,
-                             TrainingConfig& training_config,
-                             LstmConfig& network_config,
-                             MidiTranslator& midi_translator,
-                             size_t update_period )
+LstmTrainer::LstmTrainer( littlelstm::LstmNetwork& untrained_network,
+                          TrainingEventStream& training_stream,
+                          TrainingConfig& training_config,
+                          LstmConfig& network_config,
+                          MidiTranslator& midi_translator,
+                          size_t update_period )
   : _network( untrained_network )
   , _training_stream( training_stream )
   , _training_config( training_config )

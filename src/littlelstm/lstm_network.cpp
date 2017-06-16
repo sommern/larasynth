@@ -35,6 +35,17 @@ LstmNetwork::LstmNetwork( LstmArchitecture& arch, bool training )
                  arch.get_units_properties(), training )
 {}
 
+LstmNetwork::LstmNetwork( NetworkImporter& importer, bool training )
+  : LstmNetwork( importer.get_input_count(),
+                 importer.get_output_count(),
+                 importer.get_unit_count(),
+                 importer.get_connections(),
+                 importer.get_units_properties(),
+                 training )
+{
+  set_weights( importer.get_weights() );
+}
+
 LstmNetwork::LstmNetwork( size_t input_count,
                           size_t output_count, size_t unit_count,
                           vector< pair<Id_t, Id_t> > connections,
@@ -73,6 +84,7 @@ LstmNetwork::LstmNetwork( size_t input_count,
   , _error_resps( _unit_count, 0.0 )
   , _weights( _unit_count, vector<double>( _unit_count, 0.0 ) )
   , _old_weight_changes( _unit_count, vector<double>( _unit_count, 0.0 ) )
+  , _units_properties( units_properties )
 {
   for( auto& conn : connections ) {
     Index_t in_id = conn.first;
@@ -128,6 +140,15 @@ LstmNetwork::LstmNetwork( size_t input_count,
   }
 
   _activations[_bias_id] = 1.0;
+}
+
+void LstmNetwork::export_network( NetworkExporter& exporter ) const {
+  exporter.set_input_count( _input_count );
+  exporter.set_output_count( _output_count );
+  exporter.set_unit_count( _unit_count );
+  exporter.set_connections( get_connections() );
+  exporter.set_units_properties( _units_properties );
+  exporter.set_weights( get_weights_map() );
 }
 
 void LstmNetwork::feed_forward( const vector<double>& input ) {
@@ -365,10 +386,10 @@ void LstmNetwork::update_weights( const double learning_rate,
   }
 }      
 
-void LstmNetwork::set_weights( WeightsMap_t& weights_map ) {
+void LstmNetwork::set_weights( const WeightsMap_t& weights_map ) {
   for( auto& kv_out : weights_map ) {
     Id_t out_id = kv_out.first;
-    for( auto& kv_in : weights_map[out_id] ) {
+    for( auto& kv_in : weights_map.at( out_id ) ) {
       Id_t in_id = kv_in.first;
       double weight = kv_in.second;
 
@@ -377,7 +398,7 @@ void LstmNetwork::set_weights( WeightsMap_t& weights_map ) {
   }
 }
 
-WeightsMap_t LstmNetwork::get_weights_map() {
+WeightsMap_t LstmNetwork::get_weights_map() const {
   WeightsMap_t weights_map;
 
   for( Id_t out_id = 0; out_id < _incoming_conns.size(); ++out_id ) {
@@ -389,6 +410,18 @@ WeightsMap_t LstmNetwork::get_weights_map() {
   }
 
   return weights_map;
+}
+
+vector< pair<Id_t, Id_t> > LstmNetwork::get_connections() const {
+  vector< pair<Id_t, Id_t> > connections;
+
+  for( Id_t out_id = 0; out_id < _incoming_conns.size(); ++out_id ) {
+    for( Id_t in_id : _incoming_conns[out_id] ) {
+      connections.emplace_back( in_id, out_id );
+    }
+  }
+
+  return connections;
 }
 
 void LstmNetwork::print_weights() {

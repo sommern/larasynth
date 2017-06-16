@@ -25,6 +25,7 @@
 
 using namespace std;
 using namespace larasynth;
+using namespace littlelstm;
 
 volatile sig_atomic_t lara_shutdown_flag = 0;
 
@@ -228,7 +229,7 @@ void perform( const string& directory_name, bool verbose ) {
 
     MidiMinMax min_max = results.get_min_max();
 
-    LstmNetwork net = results.get_trained_network();
+    littlelstm::LstmNetwork net = results.get_trained_network();
 
     RepresentationConfig repr_config = results.get_repr_config();
 

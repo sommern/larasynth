@@ -56,7 +56,7 @@ vector< pair<int, bool> > make_one_two_three_data( RandGen& rand ) {
     training_data.emplace_back( next, target );
   }
 
-return training_data;
+  return training_data;
 }
 
 /**

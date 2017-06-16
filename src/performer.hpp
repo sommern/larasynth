@@ -32,14 +32,14 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include "midi_state.hpp"
 #include "midi_translator.hpp"
 #include "representation_config.hpp"
-#include "lstm_network.hpp"
+#include "littlelstm/lstm_network.hpp"
 #include "time_utilities.hpp"
 
 namespace larasynth {
 
 class Performer {
 public:
-  Performer( MidiClient* midi_client, LstmNetwork& network,
+  Performer( MidiClient* midi_client, littlelstm::LstmNetwork& network,
              MidiConfig& midi_config, RepresentationConfig& repr_config,
              MidiMinMax& min_max, volatile sig_atomic_t* shutdown_flag,
              bool verbose );
@@ -53,7 +53,7 @@ private:
   void return_events( std::deque<Event*>& events );
 
   MidiClient* _midi_client;
-  LstmNetwork& _network;
+  littlelstm::LstmNetwork& _network;
 
   MidiState _midi_state;
 

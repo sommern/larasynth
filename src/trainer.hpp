@@ -30,8 +30,8 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <csignal>
 
 #include "config_directory.hpp"
-#include "lstm_network.hpp"
-#include "lstm_architecture.hpp"
+#include "littlelstm/lstm_network.hpp"
+#include "littlelstm/lstm_architecture.hpp"
 #include "training_sequence.hpp"
 #include "training_event_stream.hpp"
 #include "training_results.hpp"

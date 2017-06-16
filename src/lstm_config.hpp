@@ -28,9 +28,9 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 
 #include "config_parser.hpp"
-#include "lstm_layer_config.hpp"
+#include "littlelstm/lstm_layer_config.hpp"
 #include "rand_gen.hpp"
-#include "lstm_types.hpp"
+#include "littlelstm/lstm_types.hpp"
 #include "debug.hpp"
 #include "config_parameter.hpp"
 #include "config_parameters.hpp"
@@ -59,11 +59,12 @@ public:
   const std::vector<size_t>& get_block_counts() const { return _block_counts; }
   const std::vector<size_t>& get_cells_per_block() const { return _cells_per_block; }
   bool connection_needed( Id_t source_layer_id, Id_t dest_layer_id,
-                          lstm_unit_t source_type, lstm_unit_t dest_type );
+                          littlelstm::lstm_unit_t source_type,
+                          littlelstm::lstm_unit_t dest_type );
 
-  LstmWeightConfig get_weight_config( size_t layer_i,
-                                       lstm_unit_t source_type,
-                                       lstm_unit_t dest_type );
+  littlelstm::LstmWeightConfig
+  get_weight_config( size_t layer_i, littlelstm::lstm_unit_t source_type,
+                     littlelstm::lstm_unit_t dest_type );
   double get_learning_rate() const { return _learning_rate; }
   double get_momentum() const { return _momentum; }
 
@@ -71,21 +72,21 @@ private:
   void setup_output_layer_default_weight_configs();
   void setup_hidden_layer_default_weight_configs();
   void add_layer_to_weight_configs();
-  lstm_unit_t string_to_unit_t( const std::string& s );
+  littlelstm::lstm_unit_t string_to_unit_t( const std::string& s );
 
   size_t _input_count;
   size_t _output_count;
 
-  std::vector<LstmLayerConfig> _layer_configs;
+  std::vector<littlelstm::LstmLayerConfig> _layer_configs;
 
-  LstmWeightConfig _weight_config;
+  littlelstm::LstmWeightConfig _weight_config;
 
   std::vector<size_t> _block_counts;
   std::vector<size_t> _cells_per_block;
 
-  lstm_unit_t _source_type;
+  littlelstm::lstm_unit_t _source_type;
   Id_t _source_layer_id;
-  lstm_unit_t _dest_type;
+  littlelstm::lstm_unit_t _dest_type;
   Id_t _dest_layer_id;
 
   double _learning_rate;
