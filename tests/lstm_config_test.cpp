@@ -1,5 +1,6 @@
 #include "lstm_config.hpp"
 #include "config_parser.hpp"
+#include "littlelstm/lstm_layer_config.hpp"
 
 #include "gtest/gtest.h"
 

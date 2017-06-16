@@ -21,6 +21,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 using namespace larasynth;
+using namespace littlelstm;
 
 bool Trainer::_keep_running = true;
 
@@ -71,18 +72,14 @@ Trainer::Trainer( const string& config_directory_path,
   lstm_config.set_input_count( translator.get_input_count() );
   lstm_config.set_output_count( translator.get_output_count() );
 
-  LstmArchitecture arch( lstm_config );
+  littlelstm::LstmArchitecture arch( lstm_config.get_input_count(),
+                                     lstm_config.get_output_count(),
+                                     lstm_config.get_block_counts() );
 
-  LstmNetwork net( arch );
+  littlelstm::LstmNetwork net( arch );
   
   LstmTrainer trainer( net, training_stream, training_config, lstm_config,
                         translator, update_period );
-
-  results.add_lstm_config( lstm_config );
-  results.add_repr_config( repr_config );
-  results.add_training_config( training_config );
-  results.add_architecture( arch );
-  results.add_min_max( training_stream.get_min_max() );
 
   double best_mse = INFINITY;
   LstmResult best_result;
@@ -127,8 +124,15 @@ Trainer::Trainer( const string& config_directory_path,
     }
   }
 
+  net.set_weights( best_weights );
+
+  results.add_network( net );
+  results.add_lstm_config( lstm_config );
+  results.add_repr_config( repr_config );
+  results.add_training_config( training_config );
+  results.add_min_max( training_stream.get_min_max() );
+
   results.add_result( best_result );
-  results.add_weights( best_weights );
 
   cout << endl << "Writing results to " << results.get_filename() << endl;
 

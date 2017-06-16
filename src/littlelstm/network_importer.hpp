@@ -1,5 +1,5 @@
 /*
-Copyright 2016 Nathan Sommer
+Copyright 2017 Nathan Sommer
 
 This file is part of Larasynth.
 
@@ -19,25 +19,23 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <map>
+
+#include <vector>
+#include <utility>
 
 #include "lstm_types.hpp"
-#include "lstm_weight_generator.hpp"
+#include "lstm_unit_properties.hpp"
 
-namespace larasynth {
+namespace littlelstm {
 
-class LstmLayerConfig {
+class NetworkImporter {
 public:
-  bool connection_needed( Id_t other_id, lstm_unit_t source_type,
-                          lstm_unit_t dest_type );
-  LstmWeightConfig get_weight_config( Id_t other_id, lstm_unit_t source_type,
-                                       lstm_unit_t dest_type );
-
-  void add_weight_config( Id_t other_id, lstm_unit_t source_type,
-                          lstm_unit_t dest_type, LstmWeightConfig config );
-
-private:
-  std::map< Id_t, std::map< lstm_unit_t, std::map< lstm_unit_t, LstmWeightConfig > > >  _weight_configs;
+  virtual size_t get_input_count() =0;
+  virtual size_t get_output_count() =0;
+  virtual size_t get_unit_count() =0;
+  virtual std::vector< std::pair<Id_t, Id_t> > get_connections() =0;
+  virtual const std::vector<LstmUnitProperties> get_units_properties() =0;
+  virtual WeightsMap_t get_weights() =0;
 };
 
 }

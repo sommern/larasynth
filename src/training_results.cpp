@@ -21,12 +21,15 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 using namespace larasynth;
+using namespace littlelstm;
 using namespace nlohmann;
 
 TrainingResults::TrainingResults( const string& filename,
                                   training_results_mode mode )
   : _filename( filename )
   , _mode( mode )
+  , _importer()
+  , _exporter()
 {
   if( _mode == READ_RESULTS ) {
     if( !is_regular_file( _filename ) ) {
@@ -47,6 +50,7 @@ TrainingResults::TrainingResults( const string& filename,
     }
 
     _json = json::parse( json_data );
+    _importer.set_json( _json );
   }
   else if( _mode == WRITE_RESULTS ) {
     if( is_regular_file( _filename ) ) {
@@ -92,13 +96,13 @@ WeightsMap_t TrainingResults::get_weights() {
   return weights_map;
 }
 
-void TrainingResults::add_architecture( const LstmArchitecture& arch ) {
-  _json["arch_unit_count"] = arch.get_unit_count();
-  _json["arch_input_count"] = arch.get_input_count();
-  _json["arch_output_count"] = arch.get_output_count();
+void TrainingResults::add_network( const LstmNetwork& net ) {
+  if( _json.size() > 0 ) {
+    throw TrainingResultsException( "Network must be added to results first" );
+  }
 
-  add_connections( arch.get_connections() );
-  add_units_properties( arch.get_units_properties() );
+  net.export_network( _exporter );
+  _json = _exporter.get_json();
 }
 
 void TrainingResults::add_connections( const vector< pair< Id_t, Id_t > >&
@@ -143,7 +147,7 @@ void TrainingResults::add_units_properties( const vector<LstmUnitProperties>&
     unit_json["act_func"] =
       act_func_type_to_string( unit_properties.get_act_func_type() );
 
-    if( unit_properties.get_self_conn_gater() != NO_UNIT )
+    if( unit_properties.get_self_conn() )
       unit_json["self_conn_gater"] = unit_properties.get_self_conn_gater();
 
     _json["units_properties"].push_back( unit_json );
@@ -272,25 +276,7 @@ MidiMinMax TrainingResults::get_min_max() {
 }
 
 LstmNetwork TrainingResults::get_trained_network() {
-  size_t unit_count, input_count, output_count;
-
-  try {
-    unit_count = _json["arch_unit_count"];
-    input_count = _json["arch_input_count"];
-    output_count = _json["arch_output_count"];
-  }
-  catch( const domain_error& e ) {
-    throw TrainingResultsException( e.what() );
-  }
-
-  LstmNetwork net( input_count, output_count, unit_count,
-                    get_connections(), get_units_properties(), false );
-
-  WeightsMap_t weights = get_weights();
-
-  net.set_weights( weights );
-
-  return net;
+  return LstmNetwork( _importer );
 }
 
 void TrainingResults::add_result( const LstmResult& result ) {

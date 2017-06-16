@@ -21,6 +21,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace std;
 using namespace larasynth;
+using namespace littlelstm;
 
 Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
                       MidiConfig& midi_config,

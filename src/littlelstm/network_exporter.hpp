@@ -1,5 +1,5 @@
 /*
-Copyright 2016 Nathan Sommer
+Copyright 2017 Nathan Sommer
 
 This file is part of Larasynth.
 
@@ -19,35 +19,28 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+
+#include <vector>
+#include <utility>
+
 #include "lstm_types.hpp"
+#include "lstm_unit_properties.hpp"
 
-namespace larasynth {
+namespace littlelstm {
 
-class LstmGatedConn {
+class NetworkExporter {
 public:
-  LstmGatedConn() {}
-  LstmGatedConn( Id_t gater, Id_t in, Id_t out )
-    : gater_id( gater ), in_id( in ), out_id( out ) {}
+  NetworkExporter() {}
+  ~NetworkExporter() {}
 
-  Id_t gater_id;
-  Id_t in_id;
-  Id_t out_id;
-};
-
-inline bool operator < ( const LstmGatedConn& A, const LstmGatedConn& B ) {
-  if( A.gater_id < B.gater_id )
-    return true;
-  if( A.in_id < B.in_id )
-    return true;
-  if( A.out_id < B.out_id )
-    return true;
-
-  return false;
-}
-
-struct LstmGatedConnData {
-  Real_t gater_activation;
-  Real_t right_term_sum;
+  virtual void set_input_count( size_t input_count ) =0;
+  virtual void set_output_count( size_t output_count ) =0;
+  virtual void set_unit_count( size_t unit_count ) =0;
+  virtual void set_connections( const std::vector< std::pair<Id_t, Id_t> >&
+                                connections ) =0;
+  virtual void set_units_properties( const std::vector<LstmUnitProperties>&
+                                     units_properties ) =0;
+  virtual void set_weights( const WeightsMap_t& weights ) =0;
 };
 
 }

@@ -28,7 +28,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <cassert>
 #include <set>
 
-#include "lstm_types.hpp"
+#include "littlelstm/lstm_types.hpp"
 #include "config_parameters.hpp"
 #include "midi_types.hpp"
 

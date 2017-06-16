@@ -34,6 +34,8 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include "lstm_gated_connection.hpp"
 #include "lstm_architecture.hpp"
 #include "lstm_unit_properties.hpp"
+#include "network_exporter.hpp"
+#include "network_importer.hpp"
 #include "rand_gen.hpp"
 
 namespace littlelstm {
@@ -43,6 +45,7 @@ class LstmArchitecture;
 class LstmNetwork {
 public:
   explicit LstmNetwork( LstmArchitecture& arch, bool training = true );
+  explicit LstmNetwork( NetworkImporter& importer, bool training = false );
   LstmNetwork( size_t input_count,
                size_t output_count, size_t unit_count, 
                std::vector< std::pair<Id_t, Id_t> > connections,
@@ -61,10 +64,13 @@ public:
 
   std::map<Id_t, double> get_cell_states();
 
-  WeightsMap_t get_weights_map();
-  void set_weights( WeightsMap_t& weights_map );
+  WeightsMap_t get_weights_map() const;
+  std::vector< std::pair<Id_t, Id_t> > get_connections() const;
+  void set_weights( const WeightsMap_t& weights_map );
 
   void zero_network();
+
+  void export_network( NetworkExporter& exporter ) const;
 
 private:
   void calculate_activations();
@@ -122,6 +128,8 @@ private:
 
   std::vector< std::vector<double> > _weights;
   std::vector< std::vector<double> > _old_weight_changes;
+
+  std::vector<LstmUnitProperties> _units_properties;
 
   RandGen _rand_gen;
 };
