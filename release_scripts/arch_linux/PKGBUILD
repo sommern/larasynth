@@ -1,0 +1,22 @@
+# Maintainer: Nathan Sommer <nsommer@wooster.edu>
+pkgname=larasynth
+pkgver=0.2.3
+pkgrel=1
+pkgdesc="MIDI application which can learn to turn your synthesizer's knobs for you."
+arch=('i686' 'x86_64')
+url="https://larasynth.readthedocs.io"
+license=('GPL3')
+depends=('jack')
+source=("https://github.com/sommern/larasynth/releases/download/v$pkgver/larasynth-source-$pkgver.tar.gz")
+md5sums=('958f5d0d5049be72729edcbf6621c585')
+
+build() {
+	cd "$pkgname-$pkgver"
+	./configure --prefix=/usr
+	make
+}
+
+package() {
+	cd "$pkgname-$pkgver"
+	make DESTDIR="$pkgdir/" install
+}
