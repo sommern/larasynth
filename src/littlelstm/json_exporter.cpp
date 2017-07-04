@@ -81,14 +81,4 @@ void JsonExporter::set_weights( const WeightsMap_t& weights ) {
 
     _json["weights"].push_back( weights.at( out_id ).at ( in_id ) );
   }
-
-  cout << "connections:" << endl;
-  
-  for( auto& x : _json["connections"] )
-    cout << x << endl;
-
-  cout << "weights:" << endl;
-
-  for( auto& x : _json["weights"] )
-    cout << x << endl;
 }
