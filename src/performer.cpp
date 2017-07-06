@@ -30,7 +30,6 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
                       volatile sig_atomic_t* shutdown_flag, bool verbose )
   : _midi_client( midi_client )
   , _network( network )
-  , _midi_state( midi_config.get_ctrl_defaults() )
   , _ctrls( midi_config.get_ctrls() )
   , _shutdown_flag( shutdown_flag )
   , _verbose( verbose )

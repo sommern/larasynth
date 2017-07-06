@@ -102,19 +102,6 @@ training_event_stream_test_LDADD += $(top_srcdir)/src/midi_translator.o
 training_event_stream_test_LDADD += $(top_srcdir)/src/training_sequence.o
 training_event_stream_test_LDADD += $(top_srcdir)/src/training_sequence_parser.o
 
-TESTS += midi_state_test
-check_PROGRAMS += midi_state_test
-midi_state_test_SOURCES = midi_state_test.cpp
-midi_state_test_LDADD = $(top_srcdir)/src/midi_state.o
-midi_state_test_LDADD += $(top_srcdir)/src/midi_config.o
-midi_state_test_LDADD += $(top_srcdir)/src/config_directory.o
-midi_state_test_LDADD += $(top_srcdir)/src/config_parser.o
-midi_state_test_LDADD += $(top_srcdir)/src/config_parameters.o
-midi_state_test_LDADD += $(top_srcdir)/src/config_parameter.o
-midi_state_test_LDADD += $(top_srcdir)/src/lexer.o
-midi_state_test_LDADD += $(top_srcdir)/src/tokens.o
-midi_state_test_LDADD += $(top_srcdir)/src/event.o
-
 TESTS += midi_translator_test
 check_PROGRAMS += midi_translator_test
 midi_translator_test_SOURCES = midi_translator_test.cpp

@@ -69,8 +69,6 @@ midi_file_reader.cpp \
 midi_file_reader.hpp \
 midi_min_max.cpp \
 midi_min_max.hpp \
-midi_state.cpp \
-midi_state.hpp \
 midi_translator.cpp \
 midi_translator.hpp \
 midi_types.hpp \
