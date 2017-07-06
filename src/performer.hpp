@@ -29,7 +29,6 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include "midi_client.hpp"
 #include "event_pool.hpp"
 #include "midi_config.hpp"
-#include "midi_state.hpp"
 #include "midi_translator.hpp"
 #include "representation_config.hpp"
 #include "littlelstm/lstm_network.hpp"
@@ -54,8 +53,6 @@ private:
 
   MidiClient* _midi_client;
   littlelstm::LstmNetwork& _network;
-
-  MidiState _midi_state;
 
   EventPool _event_pool;
   

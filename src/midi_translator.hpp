@@ -29,7 +29,6 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include "debug.hpp"
 #include "representation_config.hpp"
 #include "midi_config.hpp"
-#include "midi_state.hpp"
 #include "midi_min_max.hpp"
 #include "representation_config.hpp"
 #include "run_modes.hpp"
@@ -60,7 +59,6 @@ public:
   ctrl_values_t get_output_ctrl_values() const
   { return _output_ctrl_values; }
 
-  void update_state( const MidiState& midi_state );
   void update_ctrl_values( const ctrl_values_t& new_values );
   void update_ctrl_value( event_data_t ctrl, event_data_t value );
   void report_note_event( const Event* note_event );

@@ -129,12 +129,6 @@ void MidiTranslator::report_note_event( const Event* note_event ) {
   }
 }
 
-void MidiTranslator::update_state( const MidiState& new_state ) {
-  _note_velocities = new_state.get_note_velocities();
-  _target_ctrl_values = new_state.get_ctrl_values();
-  adjust_ctrl_values( _target_ctrl_values );
-}
-
 void MidiTranslator::update_ctrl_values( const ctrl_values_t& new_values ) {
   _target_ctrl_values = new_values;
   adjust_ctrl_values( _target_ctrl_values );

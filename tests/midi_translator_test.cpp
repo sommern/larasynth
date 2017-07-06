@@ -3,7 +3,6 @@
 #include "midi_config.hpp"
 #include "config_parser.hpp"
 #include "config_parameters.hpp"
-#include "midi_state.hpp"
 #include "midi_min_max.hpp"
 #include "event.hpp"
 #include "training_sequence.hpp"

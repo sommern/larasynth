@@ -23,7 +23,6 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <map>
 
 #include "midi_types.hpp"
-#include "midi_state.hpp"
 
 namespace larasynth {
 
