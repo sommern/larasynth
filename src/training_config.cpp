@@ -64,9 +64,6 @@ TrainingConfig::TrainingConfig( ConfigParameters& params ) {
                                  &_squared_error_failure_tolerance,
                                  DEFAULT_SQUARED_ERROR_FAILURE_TOLERANCE,
                                  (size_t)0, size_t_max );
-  optional_size_ts.emplace_back( "max_epoch_count", &_max_epoch_count,
-                                 DEFAULT_MAX_EPOCH_COUNT, (size_t)1,
-                                 size_t_max );
 
   for( auto& var_to_set : optional_size_ts ) {
     try {
@@ -79,6 +76,16 @@ TrainingConfig::TrainingConfig( ConfigParameters& params ) {
     catch( UndefinedParameterException& e ) {
       *var_to_set.var_ptr = var_to_set.default_value;
     }
+  }
+
+  try {
+    params.set_var( "max_epoch_count", _max_epoch_count );
+  }
+  catch( ConfigParameterException& e ) {
+    throw TrainingConfigException( e.what() );
+  }
+  catch( UndefinedParameterException& e ) {
+    _max_epoch_count = DEFAULT_MAX_EPOCH_COUNT;
   }
 
   double double_max = numeric_limits<double>::max();

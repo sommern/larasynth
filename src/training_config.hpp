@@ -85,7 +85,7 @@ public:
   { return _squared_error_failure_tolerance; }
   double get_zero_network_on_reset() const { return _zero_network_on_reset; }
   double get_mse_threshold() const { return _mse_threshold; }
-  size_t get_max_epoch_count() const { return _max_epoch_count; }
+  int get_max_epoch_count() const { return _max_epoch_count; }
 
 private:
   // booleans
@@ -111,7 +111,7 @@ private:
   size_t _consecutive_failures_for_reset;
   size_t _squared_error_failure_tolerance;
 
-  size_t _max_epoch_count;
+  int _max_epoch_count;
   double _mse_threshold;
 };
 
