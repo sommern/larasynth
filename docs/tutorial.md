@@ -392,6 +392,6 @@ oscillate up and down.
 
 ## Beyond This Tutorial
 
-From here the possibilities are endless! Please see the [user guide](guide) for
-a more detailed guide to creating good training examples and using Larasynth's
-features.
+From here the possibilities are endless! Please see the
+[topic guide](topics.md) for a more detailed guide to creating good training
+examples and using Larasynth's features.
