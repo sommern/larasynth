@@ -32,6 +32,12 @@ Trainer::Trainer( const string& config_directory_path,
   ConfigDirectory dir( config_directory_path );
   dir.process_directory();
 
+  if( !dir.training_examples_exist() ) {
+    string error = "There are no training examples in the directory " +
+      config_directory_path + ".\nCould not train.";
+    throw TrainerException( error );
+  }
+
   TrainingResults results( dir.get_new_training_results_filename(),
                            WRITE_RESULTS );
 
