@@ -131,7 +131,8 @@ consecutive_failures_for_reset = 5
 # How many training epochs should be performed before the network validates
 epoch_count_before_validating = 100
 
-# Number of training epochs before training stops
+# Maximum number of training epochs before training stops. Use a number less
+# than or equal to 0 to train indefinitely.
 max_epoch_count = 3000
 
 # If the mean squared error for each time step reaches this threshold, then

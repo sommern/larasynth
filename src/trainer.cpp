@@ -104,8 +104,14 @@ Trainer::Trainer( const string& config_directory_path,
   repr_config.print_representation_configuration();
   cout << endl;
 
-  while( trainer.get_epoch() <= training_config.get_max_epoch_count()
-         && !*_shutdown_flag ) {
+  size_t max_epoch_count;
+
+  if( training_config.get_max_epoch_count() > 0 )
+    max_epoch_count = training_config.get_max_epoch_count();
+  else
+    max_epoch_count = numeric_limits<size_t>::max();
+
+  while( trainer.get_epoch() <= max_epoch_count && !*_shutdown_flag ) {
     trainer.run_training_epoch();
 
     if( trainer.should_validate() ) {
@@ -143,4 +149,4 @@ Trainer::Trainer( const string& config_directory_path,
   cout << endl << "Writing results to " << results.get_filename() << endl;
 
   results.write();
-}  
+}
