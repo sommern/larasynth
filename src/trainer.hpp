@@ -43,6 +43,12 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace larasynth {
 
+class TrainerException : public std::runtime_error {
+public:
+  TrainerException( const std::string& message )
+    : runtime_error( message ) {};
+};
+
 class Trainer {
 public:
   Trainer( const std::string& config_directory_path,
