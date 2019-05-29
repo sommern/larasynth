@@ -111,8 +111,25 @@ Trainer::Trainer( const string& config_directory_path,
   else
     max_epoch_count = numeric_limits<size_t>::max();
 
+  Timer training_timer;
+  Timer since_last_report_timer;
+
   while( trainer.get_epoch() <= max_epoch_count && !*_shutdown_flag ) {
     trainer.run_training_epoch();
+
+    if( since_last_report_timer.get_elapsed_minutes() >= 1.0 ) {
+      since_last_report_timer.start();
+      double elapsed_minutes = training_timer.get_elapsed_minutes();
+      
+      cout << endl;
+      cout << (int)elapsed_minutes << " minute(s) elapsed" << endl;
+      cout << trainer.get_epoch() / elapsed_minutes << " epochs per minute"
+           << endl;
+      if( best_mse != INFINITY )
+        cout << "Best MSE: " << best_mse << " after epoch " <<
+             best_result.get_epoch() << endl;
+      cout << endl;
+    }
 
     if( trainer.should_validate() ) {
       cout << "Validating after epoch " << trainer.get_epoch() << endl;
