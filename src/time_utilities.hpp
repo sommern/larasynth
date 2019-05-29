@@ -26,6 +26,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace larasynth {
 
+static const size_t MICROSECONDS_PER_MINUTE = 60000000;
 static const size_t MICROSECONDS_PER_SECOND = 1000000;
 static const size_t MICROSECONDS_PER_MILLISECOND = 1000;
 
@@ -103,6 +104,11 @@ public:
   inline double get_elapsed_seconds() {
     size_t elapsed = get_elapsed_microseconds();
     return (double)elapsed / MICROSECONDS_PER_SECOND;
+  }
+
+  inline double get_elapsed_minutes() {
+    size_t elapsed = get_elapsed_microseconds();
+    return (double)elapsed / MICROSECONDS_PER_MINUTE;
   }
 
 private:
