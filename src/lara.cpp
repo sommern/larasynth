@@ -5,6 +5,8 @@
  * 
  */
 
+#include <config.h>
+
 #include <iostream>
 #include <string>
 #include <signal.h>
@@ -254,6 +256,8 @@ void perform( const string& directory_name, bool verbose ) {
  * larasynth entry point.
  */
 int main( int argc, char** argv ) {
+  cout << "Larasynth version " << PACKAGE_VERSION << endl << endl;
+
   // we need a project directory and an action
   if( argc < 3 )
     print_usage_and_exit( argc, argv );
