@@ -108,7 +108,8 @@ validation_example_repetitions = 5
 tempo_adjustment_factor = 0.0
 
 # If this value is greater than zero, some jitter will be randomly added to
-# the duration between notes. 1.0 is the maximum jitter factor and will 
+# the duration between notes. 1.0 is the maximum jitter factor and will adjust
+# any given duration as dramatically as twice as long or half as long.
 tempo_jitter_factor = 0.0
 
 # The next 3 options are important as they must be lax if you need the
@@ -148,6 +149,6 @@ mse_threshold = 0.0
 # performance. Replace with the name of the results file you want to use. If
 # this is not defined you will be presented with a choice of results files when
 # performing.
-# training_results = \"results-2017-05-29-10:56:45.763129.json\"
+# training_results = "results-2017-05-29-10:56:45.763129.json"
 )";
 }
