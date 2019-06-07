@@ -41,24 +41,24 @@ if test "$gcc_warnings" = yes; then
 fi
 
 # Check for GCC debug flags (optional)
-AC_MSG_CHECKING([whether to enable the GCC debug build])
-AC_ARG_ENABLE([gcc-debug],
-    [AS_HELP_STRING([--enable-gcc-debug],
-                    [turn on GCC debug flags (for developers)])],
-    [case "$enableval" in
-        yes|no) ;;
-        *)      AC_MSG_ERROR([bad value ${enableval} for gcc-debug option]) ;; 
-    esac
-    gcc_debug=$enableval],
-    [gcc_debug=no]
-)
-AC_MSG_RESULT([$gcc_debug])
-if test "$gcc_debug" = yes; then
-    AC_SUBST([CXXFLAGS],"$GCC_DEBUG_CXXFLAGS")
-    AC_DEFINE([DEBUG],[],[Debug Mode])
-else
-    AC_DEFINE([NDEBUG],[],[Release Mode])
-fi
+# AC_MSG_CHECKING([whether to enable the GCC debug build])
+# AC_ARG_ENABLE([gcc-debug],
+#     [AS_HELP_STRING([--enable-gcc-debug],
+#                     [turn on GCC debug flags (for developers)])],
+#     [case "$enableval" in
+#         yes|no) ;;
+#         *)      AC_MSG_ERROR([bad value ${enableval} for gcc-debug option]) ;; 
+#     esac
+#     gcc_debug=$enableval],
+#     [gcc_debug=no]
+# )
+# AC_MSG_RESULT([$gcc_debug])
+# if test "$gcc_debug" = yes; then
+#     AC_SUBST([CXXFLAGS],"$GCC_DEBUG_CXXFLAGS")
+#     AC_DEFINE([DEBUG],[],[Debug Mode])
+# else
+#     AC_DEFINE([NDEBUG],[],[Release Mode])
+# fi
 
 # Configure RtMidi
 AC_CANONICAL_HOST
