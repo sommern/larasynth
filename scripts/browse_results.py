@@ -22,9 +22,19 @@ import sys
 import os
 import matplotlib.pyplot as plt
 import json
+import argparse
+from pathlib import Path
 
-plt.ion()
-
+# plt.ion()
+plt.rcParams.update({
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": [
+         r"\usepackage[utf8x]{inputenc}",
+         r"\usepackage[T1]{fontenc}",
+         r"\usepackage{cmbright}",
+    ],
+    "font.family": "serif",
+})
 
 class Result:
     def __init__(self, json_filename):
@@ -108,10 +118,12 @@ class Results:
 def plot_vectors(title, x, y, label=None):
     plt.figure(title)
     plt.plot(x, y, label=label)
-    plt.draw()
+    # plt.draw()
 
 
-def browse_result(result: Result):
+def browse_result(result: Result, save):
+    orig_path = Path(result.json_filename)
+
     all_targets = result.all_targets
     all_outputs = result.all_outputs
 
@@ -119,6 +131,9 @@ def browse_result(result: Result):
 
     plt.figure(figure_name)
     plt.clf()
+
+    plt.xlabel('Time Step')
+    plt.ylabel('Controller Value')
 
     for ctrl in result.ctrls:
         targets = all_targets[ctrl]
@@ -135,14 +150,35 @@ def browse_result(result: Result):
     #plt.legend()
     plt.suptitle('epoch ' + str(result.epoch) + ', MSE = ' + str(result.mse))
 
+    if save:
+        new_stem = orig_path.stem + '-targets_and_outputs'
+        pdf_filename = new_stem + '.pdf'
+        pgf_filename = new_stem + '.pgf'
+
+        for filename in (pdf_filename, pgf_filename):
+            plt.savefig(filename)
+
     figure_name = 'Cell States'
 
     plt.figure(figure_name)
     plt.clf()
+
+    plt.xlabel('Time Step')
+    plt.ylabel('Cell Value')
+
     for cell_states in result.all_cell_states:
         plot_vectors(figure_name, list(range(len(cell_states))), cell_states)
 
-    input()
+    if save:
+        new_stem = orig_path.stem + '-cell_states'
+        pdf_filename = new_stem + '.pdf'
+        pgf_filename = new_stem + '.pgf'
+
+        for filename in (pdf_filename, pgf_filename):
+            plt.savefig(filename)
+    else:
+        plt.show()
+
     plt.close()
 
 
@@ -172,15 +208,20 @@ def pick_result(results):
 
 
 def main():
-    if len(sys.argv) == 1:
-        sys.exit('expected a list of directories')
+    parser = argparse.ArgumentParser()
 
-    results = Results(sys.argv[1:])
+    parser.add_argument("-s", "--save", help="save figures as files",
+                        action="store_true")
+    parser.add_argument("directory", nargs="+")
+
+    args = parser.parse_args()
+
+    results = Results(args.directory)
 
     result = pick_result(results)
 
     if result is not None:
-        browse_result(result)
+        browse_result(result, args.save)
 
 
 if __name__ == "__main__":
