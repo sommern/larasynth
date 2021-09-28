@@ -23,6 +23,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <cassert>
 #include <map>
+#include <stdexcept>
 
 namespace larasynth {
 
