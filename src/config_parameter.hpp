@@ -23,6 +23,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include <cassert>
 #include <map>
+#include <stdexcept>
 
 namespace larasynth {
 
@@ -40,7 +41,7 @@ enum config_parameter_t {
 class ConfigParameterException : public std::runtime_error {
 public:
   ConfigParameterException( const std::string& message )
-    : runtime_error( message ) {};
+   : runtime_error( message ) {};
 };
 
 class ConfigParameter {
