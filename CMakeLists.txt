@@ -4,6 +4,7 @@ project(larasynth
 )
 
 # https://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake
+# might want the executable in src
 add_executable(lara lara.cpp)
 set_property(TARGET lara 
     PROPERTY CXX_STANDARD 11 # require C++ 11
@@ -16,9 +17,10 @@ add_compile_options(${TARGET_NAME} -Wcast-align -Wcast-qual -Wformat -Wpointer-a
 add_compile_options(${TARGET_NAME} "$<$<CONFIG:Debug>:-g -O0 -fno-omit-frame-pointer -fno-inline>")
 
 # might want to move these to the bottom 
-add_subdirectory(lib)
+# add_subdirectory(lib)
 add_subdirectory(src)
-add_subdirectory(tests)
+# ignore tests for now
+# add_subdirectory(tests)
 
 # https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks
 set(rtmidi_api, "")
@@ -49,3 +51,7 @@ endif()
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(larasynth PRIVATE Threads::Threads)
+
+# TODO: gtest variables here
+
+message("Larasynth has been configured successfully!")

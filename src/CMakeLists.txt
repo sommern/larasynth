@@ -1,6 +1,136 @@
-cmake_minimum_required(VERSION 3.19)
-project(larasynth)
+cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
+project(larasynth
+    LANGUAGES CXX # use C++
+)
 
-target_include_directories(${PROJECT_SOURCE_DIR})
-file(GLOB SOURCES CONFIGURE_DEPENDS *.cpp *.hpp *.h) # ask nathan about this
-target_sources()
+# target_include_directories(${PROJECT_SOURCE_DIR})
+# file(GLOB SOURCES CONFIGURE_DEPENDS *.cpp *.hpp *.h) # ask nathan about this
+# target_sources()
+add_library(
+    lara
+    STATIC
+    config_directory.cpp
+    config_directory.hpp
+    config_parameter.cpp
+    config_parameter.hpp
+    config_parameters.cpp
+    config_parameters.hpp
+    config_parser.cpp
+    config_parser.hpp
+    config_variable_to_set.hpp
+    debug.hpp
+    event.cpp
+    event.hpp
+    event_logger.cpp
+    event_logger.hpp
+    event_pool.cpp
+    event_pool.hpp
+    event_queue.cpp
+    event_queue.hpp
+    example_config_string.hpp
+    filesystem_operations.hpp
+    input_features.hpp
+    interactive_prompt.cpp
+    interactive_prompt.hpp
+    json/json.hpp
+    lara.cpp
+    lexer.cpp
+    lexer.hpp
+    littlelstm/json_exporter.cpp
+    littlelstm/json_exporter.hpp
+    littlelstm/json.hpp
+    littlelstm/json_importer.cpp
+    littlelstm/json_importer.hpp
+    littlelstm/lstm_activation_function.hpp
+    littlelstm/lstm_architecture.cpp
+    littlelstm/lstm_architecture.hpp
+    littlelstm/lstm_gated_connection.hpp
+    littlelstm/lstm_layer_config.cpp
+    littlelstm/lstm_layer_config.hpp
+    littlelstm/lstm_network.cpp
+    littlelstm/lstm_network.hpp
+    littlelstm/lstm_order.hpp
+    littlelstm/lstm_types.hpp
+    littlelstm/lstm_unit_properties.cpp
+    littlelstm/lstm_unit_properties.hpp
+    littlelstm/lstm_weight_generator.hpp
+    littlelstm/network_exporter.hpp
+    littlelstm/network_importer.hpp
+    littlelstm/rand_gen.hpp
+    lock_free_queue.hpp
+    lstm_config.cpp
+    lstm_config.hpp
+    lstm_defaults.hpp
+    lstm_result.hpp
+    lstm_result_json.hpp
+    lstm_trainer.cpp
+    lstm_trainer.hpp
+    lstm_validation_results.cpp
+    lstm_validation_results.hpp
+    lstm_weight_generator.hpp
+    midi_client.hpp
+    midi_config.cpp
+    midi_config.hpp
+    midi_file_reader.cpp
+    midi_file_reader.hpp
+    midi_min_max.cpp
+    midi_min_max.hpp
+    midi_translator.cpp
+    midi_translator.hpp
+    midi_types.hpp
+    midifile/Binasc.cpp
+    midifile/Binasc.h
+    midifile/MidiEvent.cpp
+    midifile/MidiEvent.h
+    midifile/MidiEventList.cpp
+    midifile/MidiEventList.h
+    midifile/MidiFile.cpp
+    midifile/MidiFile.h
+    midifile/MidiMessage.cpp
+    midifile/MidiMessage.h
+    midifile/Options.cpp
+    midifile/Options.h
+    performer.cpp
+    performer.hpp
+    performing_config.cpp
+    performing_config.hpp
+    rand_gen.hpp
+    readerwriterqueue/atomicops.h
+    readerwriterqueue/readerwriterqueue.h
+    readerwriterqueue_lock_free_queue.hpp
+    recorder.cpp
+    recorder.hpp
+    representation_config.cpp
+    representation_config.hpp
+    representation_defaults.hpp
+    rtmidi/RtMidi.cpp
+    rtmidi/RtMidi.h
+    rtmidi_client.cpp
+    rtmidi_client.hpp
+    run_modes.hpp
+    time_utilities.hpp
+    tokens.cpp
+    tokens.hpp
+    trainer.cpp
+    trainer.hpp
+    training_config.cpp
+    training_config.hpp
+    training_defaults.hpp
+    training_event_stream.cpp
+    training_event_stream.hpp
+    training_results.cpp
+    training_results.hpp
+    training_sequence.cpp
+    training_sequence.hpp
+    training_sequence_parser.cpp
+    training_sequence_parser.hpp
+    write_training_example.cpp
+    write_training_example.hpp
+)
+
+# https://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake
+# add_executable(lara lara.cpp)
+# set_property(TARGET lara 
+#     PROPERTY CXX_STANDARD 11 # require C++ 11
+#     CXX_STANDARD_REQUIRED ON
+# )
