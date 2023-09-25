@@ -7,7 +7,7 @@ project(larasynth
 # file(GLOB SOURCES CONFIGURE_DEPENDS *.cpp *.hpp *.h) # ask nathan about this
 # target_sources()
 add_library(
-    lara
+    laraLib
     STATIC
     config_directory.cpp
     config_directory.hpp
@@ -129,8 +129,8 @@ add_library(
 )
 
 # https://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake
-# add_executable(lara lara.cpp)
-# set_property(TARGET lara 
-#     PROPERTY CXX_STANDARD 11 # require C++ 11
-#     CXX_STANDARD_REQUIRED ON
-# )
+add_executable(lara lara.cpp)
+set_property(TARGET lara 
+    PROPERTY CXX_STANDARD 11 # require C++ 11
+    CXX_STANDARD_REQUIRED ON
+)
