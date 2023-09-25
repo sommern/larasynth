@@ -1,3 +1,5 @@
+# https://stackoverflow.com/questions/7132862/how-do-i-convert-an-autotools-project-to-a-cmake-project
+
 cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 project(larasynth
     LANGUAGES CXX # use C++
@@ -56,4 +58,4 @@ target_link_libraries(lara PRIVATE Threads::Threads)
 
 # TODO: gtest variables here
 
-message("Larasynth has been configured successfully!")
+message("Larasynth has been configured successfully!") # get this to print only when successful

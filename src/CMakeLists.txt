@@ -3,9 +3,6 @@ project(larasynth
     LANGUAGES CXX # use C++
 )
 
-# target_include_directories(${PROJECT_SOURCE_DIR})
-# file(GLOB SOURCES CONFIGURE_DEPENDS *.cpp *.hpp *.h) # ask nathan about this
-# target_sources()
 add_library(
     laraLib
     STATIC
@@ -33,7 +30,7 @@ add_library(
     interactive_prompt.cpp
     interactive_prompt.hpp
     json/json.hpp
-    lara.cpp
+    # lara.cpp
     lexer.cpp
     lexer.hpp
     littlelstm/json_exporter.cpp
@@ -134,3 +131,6 @@ set_property(TARGET lara
     PROPERTY CXX_STANDARD 11 # require C++ 11
     CXX_STANDARD_REQUIRED ON
 )
+
+# g++ */*.o */*/*.o -o lara
+target_link_libraries(lara PUBLIC laraLib)
