@@ -58,4 +58,4 @@ target_link_libraries(lara PRIVATE Threads::Threads)
 
 # TODO: gtest variables here
 
-message("Larasynth has been configured successfully!") # get this to print only when successful
+# message("Larasynth has been configured successfully!") # get this to print only when successful
