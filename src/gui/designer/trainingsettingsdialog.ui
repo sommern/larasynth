@@ -35,7 +35,7 @@
      <x>10</x>
      <y>10</y>
      <width>485</width>
-     <height>623</height>
+     <height>637</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -210,7 +210,7 @@
         <item>
          <widget class="QLabel" name="label_9">
           <property name="text">
-           <string>Standard Dev</string>
+           <string>Standard Deviation</string>
           </property>
          </widget>
         </item>
@@ -367,22 +367,7 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_15">
-        <item>
-         <widget class="QLabel" name="label_19">
-          <property name="text">
-           <string>Squared Error Failure Tolerance</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spinBox_6">
-          <property name="value">
-           <number>8</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <layout class="QHBoxLayout" name="horizontalLayout_15"/>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_14">
@@ -411,14 +396,14 @@
       </item>
      </layout>
     </item>
-    <item row="7" column="0">
+    <item row="8" column="0">
      <widget class="QLabel" name="label_21">
       <property name="text">
        <string>Epoch Count Before Validating</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
+    <item row="8" column="1">
      <widget class="QSpinBox" name="spinBox_8">
       <property name="maximum">
        <number>100000</number>
@@ -428,14 +413,14 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="0">
+    <item row="9" column="0">
      <widget class="QLabel" name="label_16">
       <property name="text">
        <string>Maximum Epoch Count</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="1">
+    <item row="9" column="1">
      <widget class="QSpinBox" name="spinBox_5">
       <property name="maximum">
        <number>1000000</number>
@@ -445,15 +430,29 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="0">
+    <item row="10" column="0">
      <widget class="QLabel" name="label_17">
       <property name="text">
        <string>Mean Squared Error Threshold</string>
       </property>
      </widget>
     </item>
-    <item row="9" column="1">
+    <item row="10" column="1">
      <widget class="QDoubleSpinBox" name="doubleSpinBox_7"/>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_19">
+      <property name="text">
+       <string>Squared Error Failure Tolerance</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QSpinBox" name="spinBox_6">
+      <property name="value">
+       <number>8</number>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
