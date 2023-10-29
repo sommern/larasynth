@@ -75,8 +75,8 @@ inline std::string get_timestamp_string() {
   std::string microsecond = pad_with_zeros( std::to_string( tv.tv_usec ), 6 );
 
   std::ostringstream oss;
-  oss << year << "-" << month << "-" << day << "-" << hour << ":" << minute
-      << ":" << second << "." << microsecond;
+  oss << year << "-" << month << "-" << day << "-" << hour << "." << minute
+      << "." << second << "." << microsecond;
 
   return oss.str();
 }
