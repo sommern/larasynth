@@ -22,8 +22,9 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 #include <sstream>
-#include <dirent.h>
+// #include <dirent.h>
 #include <sys/stat.h>
+//filesystem library
 
 namespace larasynth {
 

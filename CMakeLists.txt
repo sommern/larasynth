@@ -16,9 +16,11 @@ project(larasynth
 # )
 
 # https://stackoverflow.com/questions/60622643/why-my-cmake-does-not-add-cmake-cxx-flags-debug-to-cmake-cxx-flags
-add_compile_options(${TARGET_NAME} -fdiagnostics-color=auto -Wall -Wextra -Wpedantic -Wfatal-errors)
-add_compile_options(${TARGET_NAME} -Wcast-align -Wcast-qual -Wformat -Wpointer-arith -Wwrite-strings)
-add_compile_options(${TARGET_NAME} "$<$<CONFIG:Debug>:-g -O0 -fno-omit-frame-pointer -fno-inline>")
+if(!Windows)
+    add_compile_options(${TARGET_NAME} -fdiagnostics-color=auto -Wall -Wextra -Wpedantic -Wfatal-errors)
+    add_compile_options(${TARGET_NAME} -Wcast-align -Wcast-qual -Wformat -Wpointer-arith -Wwrite-strings)
+    add_compile_options(${TARGET_NAME} "$<$<CONFIG:Debug>:-g -O0 -fno-omit-frame-pointer -fno-inline>")
+endif()
 
 # might want to move these to the bottom 
 # add_subdirectory(lib)
