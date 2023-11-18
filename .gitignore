@@ -28,3 +28,6 @@ Makefile.in
 
 # cmake stuff
 /build
+
+# vscode
+/.vscode
