@@ -135,4 +135,4 @@ set_property(TARGET lara
 # g++ */*.o */*/*.o -o lara
 target_link_libraries(lara PUBLIC laraLib)
 
-add_subdirectory(gui)
+# add_subdirectory(gui)

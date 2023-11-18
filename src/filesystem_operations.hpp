@@ -22,9 +22,8 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 #include <sstream>
-// #include <dirent.h>
 #include <sys/stat.h>
-//filesystem library
+#include <filesystem>
 
 namespace larasynth {
 
@@ -40,20 +39,22 @@ inline void append_slash_if_necessary( std::string& dirpath ) {
 }
 
 inline bool is_regular_file( const std::string& filename ) {
-  struct stat statbuf;
-
-  int ret = stat( filename.c_str(), &statbuf );
-
-  if( ret == -1 )
+  std::filesystem::path p;
+  try {
+    p = filename;
+  }
+  catch ( int e ) { // TODO: probably change what's being caught
     return false;
-  else if( S_ISREG( statbuf.st_mode ) )
-    return true;
+  }
+
+  if( std::filesystem::is_regular_file( p ) )
+      return true;
   else
     return false;
 }
 
 inline void make_directory( const std::string& dir_name ) {
-  int ret = mkdir( dir_name.c_str(), 0755 );
+  int ret = std::filesystem::create_directory( dir_name.c_str() );
 
   if( ret != 0 ) {
     std::ostringstream oss;
@@ -63,14 +64,16 @@ inline void make_directory( const std::string& dir_name ) {
 }
 
 inline bool is_directory( const std::string& filename ) {
-  struct stat statbuf;
-
-  int ret = stat( filename.c_str(), &statbuf );
-
-  if( ret == -1 )
+  std::filesystem::path p;
+  try {
+    p = filename;
+  }
+  catch ( int e ) { // TODO: probably change what's being caught
     return false;
-  else if( S_ISDIR( statbuf.st_mode ) )
-    return true;
+  }
+
+  if( std::filesystem::is_directory( p ) )
+      return true;
   else
     return false;
 }
@@ -85,24 +88,14 @@ inline void get_directory_filenames_and_subdirs( std::string path,
 
   append_slash_if_necessary( path );
 
-  DIR* dir;
-
-  if( ( dir = opendir( path.c_str() ) ) == NULL )
-    return;
-
-  struct dirent* ent;
-
-  while( ( ent = readdir( dir ) ) != NULL ) {
-    std::string filename( ent->d_name );
-    std::string rel_path = path + filename;
-
-    if( is_regular_file( rel_path ) )
-      filenames.push_back( filename );
-    else if( is_directory( rel_path ) )
-      subdirs.push_back( filename );
+  for( const auto & current_file : std::filesystem::directory_iterator( path ) ) {
+    if( std::filesystem::is_regular_file( current_file ) ) {
+      filenames.push_back( current_file.path().string() );
+    }
+    else if( std::filesystem::is_directory( current_file ) ) {
+      subdirs.push_back( current_file.path().string() );
+    }
   }
-
-  closedir( dir );
 }
 
 }
