@@ -8,7 +8,7 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
 add_executable(gui gui.cpp)
 set_property(TARGET gui 
-    PROPERTY CXX_STANDARD 11 # require C++ 11
+    PROPERTY CXX_STANDARD 17 # require C++ 17
     CXX_STANDARD_REQUIRED ON
 )
 

@@ -7,14 +7,6 @@ project(larasynth
 
 # TODO: https://stackoverflow.com/questions/38419876/cmake-generate-config-h-like-from-autoconf
 
-# https://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake
-# might want the executable in src
-# add_executable(lara lara.cpp)
-# set_property(TARGET lara 
-#     PROPERTY CXX_STANDARD 11 # require C++ 11
-#     CXX_STANDARD_REQUIRED ON
-# )
-
 # https://stackoverflow.com/questions/60622643/why-my-cmake-does-not-add-cmake-cxx-flags-debug-to-cmake-cxx-flags
 if(!Windows)
     add_compile_options(${TARGET_NAME} -fdiagnostics-color=auto -Wall -Wextra -Wpedantic -Wfatal-errors)
@@ -56,7 +48,12 @@ endif()
 # configure pthreads
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(lara PRIVATE Threads::Threads)
+target_link_libraries(lara PRIVATE Threads::Threads "stdc++fs") # link filesystem library
+
+# filesystem
+# find_package(filesystem REQUIRED)
+# target_link_libraries(lara PRIVATE std::filesystem)
+# target_link_libraries(lara stdc++fs)
 
 # TODO: gtest variables here
 

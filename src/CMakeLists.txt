@@ -128,7 +128,7 @@ add_library(
 # https://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake
 add_executable(lara lara.cpp)
 set_property(TARGET lara 
-    PROPERTY CXX_STANDARD 11 # require C++ 11
+    PROPERTY CXX_STANDARD 17 # require C++ 17
     CXX_STANDARD_REQUIRED ON
 )
 
