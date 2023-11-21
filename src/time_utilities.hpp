@@ -74,9 +74,9 @@ inline std::string get_timestamp_string() {
 
   // calculate microseconds
   auto us = std::chrono::duration_cast<std::chrono::microseconds>(rn.time_since_epoch()) % std::chrono::seconds(1);
-  auto usRounded = std::chrono::round<std::chrono::milliseconds>(us);
+  // auto usRounded = std::chrono::round<std::chrono::milliseconds>(us);
 
-  oss << std::put_time(&rntm, "%Y-%m-%d %H.%M.%S.") << usRounded.count();
+  oss << std::put_time(&rntm, "%Y-%m-%d%H.%M.%S.") << us.count();
 
   return oss.str();
 }

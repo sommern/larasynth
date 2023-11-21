@@ -48,7 +48,7 @@ endif()
 # configure pthreads
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(lara PRIVATE Threads::Threads "stdc++fs") # link filesystem library
+target_link_libraries(lara PRIVATE Threads::Threads)
 
 # filesystem
 # find_package(filesystem REQUIRED)

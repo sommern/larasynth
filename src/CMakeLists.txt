@@ -131,6 +131,10 @@ set_property(TARGET lara
     PROPERTY CXX_STANDARD 17 # require C++ 17
     CXX_STANDARD_REQUIRED ON
 )
+set_property(TARGET laraLib 
+    PROPERTY CXX_STANDARD 17 # require C++ 17
+    CXX_STANDARD_REQUIRED ON
+)
 
 # g++ */*.o */*/*.o -o lara
 target_link_libraries(lara PUBLIC laraLib)
