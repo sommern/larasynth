@@ -24,7 +24,6 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <unordered_map>
 #include <algorithm>
 #include <csignal>
-#include <unistd.h>
 
 #include "midi_client.hpp"
 #include "event_pool.hpp"

@@ -375,8 +375,8 @@ RepresentationConfig TrainingResults::get_repr_config() {
     throw TrainingResultsException( e.what() );
   }
 
-  RepresentationConfig config( ctrl_output_counts, update_rate,
-                               feature_config );
+  // no matching constructor for initialization of 'larasynth::RepresentationConfig'
+  RepresentationConfig config( ctrl_output_counts, update_rate, feature_config );
 
   return config;
 }

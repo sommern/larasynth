@@ -19,6 +19,8 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "event_logger.hpp"
 
+#include <thread>
+
 using namespace std;
 using namespace larasynth;
 
@@ -47,7 +49,7 @@ void EventLogger::run_logger() {
       cout << e->description( _label ) << endl;
       return_event( e );
     }
-    usleep( 10000 );
+    std::this_thread::sleep_for( std::chrono::microseconds( 10000 ) );
   }
 }
 

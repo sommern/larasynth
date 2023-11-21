@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <thread>
+
 #include "performer.hpp"
 
 using namespace std;
@@ -96,7 +98,7 @@ Performer::Performer( MidiClient* midi_client, LstmNetwork& network,
     }
 
     if( current_microseconds() < next_update_time ) {
-      usleep(1);
+      std::this_thread::sleep_for( std::chrono::microseconds( 1 ) );
     }
     else {
       next_update_time = current_microseconds() + period;
