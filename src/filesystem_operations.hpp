@@ -54,9 +54,9 @@ inline bool is_regular_file( const std::string& filename ) {
 }
 
 inline void make_directory( const std::string& dir_name ) {
-  int ret = std::filesystem::create_directory( dir_name.c_str() );
+  bool ret = std::filesystem::create_directory( dir_name );
 
-  if( ret != 0 ) {
+  if( !ret ) {
     std::ostringstream oss;
     oss << "Error creating directory " << dir_name;
     throw FilesystemException( oss.str() );
