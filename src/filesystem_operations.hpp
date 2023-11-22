@@ -89,10 +89,10 @@ inline void get_directory_filenames_and_subdirs( std::string path,
   append_slash_if_necessary( path );
 
   for( const auto & current_file : std::filesystem::directory_iterator( path ) ) {
-    if( std::filesystem::is_regular_file( current_file ) ) {
+    if( is_regular_file( current_file ) ) {
       filenames.push_back( current_file.path().string() );
     }
-    else if( std::filesystem::is_directory( current_file ) ) {
+    else if( is_directory( current_file ) ) {
       subdirs.push_back( current_file.path().string() );
     }
   }
