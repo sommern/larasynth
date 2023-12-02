@@ -25,9 +25,6 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <chrono>
 #include <ctime>
 #include <iomanip>
-// #include <sys/time.h>
-// sleeping, current timestamp, listing files in dir
-// chrono for sleeping
 
 namespace larasynth {
 
@@ -69,7 +66,7 @@ inline std::string get_timestamp_string() {
   // get timestamp (without microseconds)
   auto rn = std::chrono::system_clock::now();
   std::time_t rnt_t = std::chrono::system_clock::to_time_t(rn);
-  std::tm rntm = *std::localtime(&rnt_t); // TODO: deprecated?
+  std::tm rntm = *std::localtime(&rnt_t);
   // std::tm rntm = *std::gmtime(&rnt_t); // utc
 
   // calculate microseconds
