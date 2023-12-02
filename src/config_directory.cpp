@@ -35,6 +35,8 @@ ConfigDirectory::ConfigDirectory( const string& directory_name )
 }
 
 void ConfigDirectory::process_directory() {
+  cout << "process " << _dir_name << endl;
+
   if( !is_directory( _dir_name ) )
     throw ConfigDirectoryException( _dir_name + " is not a directory" );
 
@@ -56,13 +58,21 @@ void ConfigDirectory::process_directory() {
   get_directory_filenames_and_subdirs( _dir_name, filenames,
                                        root_dir_subdirs );
 
+  for(auto f : filenames)
+    cout << f << ", ";
+  cout << endl;
+
+  for(auto r : root_dir_subdirs)
+    cout << r << ", ";
+  cout << endl;
+
   if( find( filenames.begin(), filenames.end(), "larasynth.conf" )
       == filenames.end() )
     throw ConfigDirectoryException( "no larasynth.conf found in " +
                                     _dir_name );
 
   if( find( root_dir_subdirs.begin(), root_dir_subdirs.end(),
-            "training_results" ) != root_dir_subdirs.end() ) {
+            _dir_name + "training_results" ) != root_dir_subdirs.end() ) {
     vector<string> subdirs;
     string results_dir = _dir_name + "training_results/";
     get_directory_filenames_and_subdirs( results_dir, filenames, subdirs );
@@ -77,17 +87,19 @@ void ConfigDirectory::process_directory() {
   }
 
   if( find( root_dir_subdirs.begin(), root_dir_subdirs.end(),
-            "training_examples" ) != root_dir_subdirs.end() ) {
+            _dir_name + "training_examples" ) != root_dir_subdirs.end() ) { // TODO: never getting here
     vector<string> subdirs;
     string examples_dir = _dir_name + "training_examples/";
+
+    cout << "aaaaa" << endl;
 
     get_directory_filenames_and_subdirs( examples_dir, filenames, subdirs );
 
     for( string& filename : filenames ) {
       if( is_valid_training_example_filename( filename ) )
-        _training_example_filenames.push_back( examples_dir + filename );
+        _training_example_filenames.push_back( examples_dir + filename ); // TODO: this is wrong
     }
-
+    
     sort( _training_example_filenames.begin(),
           _training_example_filenames.end() );
   }
@@ -96,7 +108,7 @@ void ConfigDirectory::process_directory() {
 }
 
 bool ConfigDirectory::is_valid_training_example_filename( const string&
-                                                          filename ) {
+                                                          filename ) { // TODO: maybe pass in file path object and check type
   //static regex example_re( "example-\\d\\d\\d\\d-\\d\\d-\\d\\d-\\d\\d:\\d\\d:\\d\\d.seq" );
   static regex example_re( ".+\\.seq" );
 

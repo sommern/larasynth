@@ -24,6 +24,7 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 #include <sys/stat.h>
 #include <filesystem>
+#include <iostream>
 
 namespace larasynth {
 
@@ -69,13 +70,18 @@ inline bool is_directory( const std::string& filename ) {
     p = filename;
   }
   catch ( int e ) { // TODO: probably change what's being caught
+    std::cout << p << " invalid " << e << std::endl;
     return false;
   }
 
-  if( std::filesystem::is_directory( p ) )
+  if( std::filesystem::is_directory( p ) ){
+    std::cout << "true " << p << std::endl;
       return true;
-  else
+  }
+  else{
+    std::cout << "false " << p << std::endl;
     return false;
+  }
 }
 
 inline void get_directory_filenames_and_subdirs( std::string path,
