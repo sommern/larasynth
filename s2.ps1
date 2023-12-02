@@ -1,3 +1,0 @@
-cd ../..
-
-rm -r build
