@@ -12,6 +12,7 @@ if(!Windows)
     add_compile_options(${TARGET_NAME} -fdiagnostics-color=auto -Wall -Wextra -Wpedantic -Wfatal-errors)
     add_compile_options(${TARGET_NAME} -Wcast-align -Wcast-qual -Wformat -Wpointer-arith -Wwrite-strings)
     add_compile_options(${TARGET_NAME} "$<$<CONFIG:Debug>:-g -O0 -fno-omit-frame-pointer -fno-inline>")
+    add_compile_options(${TARGET_NAME} "-O2") # optimization
 endif()
 
 # might want to move these to the bottom 
