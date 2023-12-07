@@ -55,7 +55,7 @@ $ brew install larasynth
 
 ### From Source
 
-You will need GCC and make installed to build Larasynth.
+You will need GCC, make, and CMake installed to build Larasynth.
 
 Download the latest source from here:
 
@@ -67,12 +67,33 @@ that you downloaded):
 ```nohighlight
 $ tar zxf larasynth-X.Y.Z.tar.gz
 $ cd larasynth-X.Y.Z
-$ ./configure
+$ mkdir build
+$ cd build
+# cmake ..
 $ make
-$ sudo make install
 ```
+
+#### Windows
+
+It is recommended that you use mingw as your compiler when on Windows. Here is a [tutorial](https://code.visualstudio.com/docs/cpp/config-mingw) for setting up mingw. You will need to run `mingw32-make` instead of `make` in order to compile using the generated makefiles.
+
+When installing from source on Windows, you will need to add a few command line arguments when running CMake.
+
+```nohighlight
+cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
+```
+
+If you use a different compiler than mingw, you may need to [change the generator used by CMake](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html).
 
 ## Using Larasynth
 
 See the [tutorial](tutorial.md) and the [topics guide](topics.md) for details
 on using Larasynth.
+
+## Contributors
+
+- Nathan Sommer
+    - [Github](https://github.com/sommern)
+
+- Aaron Ripley
+    - [Github](https://github.com/ripleya1)
