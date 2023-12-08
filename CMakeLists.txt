@@ -5,6 +5,26 @@ project(larasynth
     LANGUAGES CXX # use C++
 )
 
+# https://stackoverflow.com/questions/32945670/set-compiler-option-to-default-in-cmake
+
+macro(RemoveDebugCXXFlag flag)
+    string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+endmacro()
+
+macro(RemoveReleaseCXXFlag flag)
+    string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+endmacro()
+
+message(${CMAKE_CXX_FLAGS_DEBUG}) # Print Debug Flags Before Change
+RemoveDebugCXXFlag("/RTC1")
+
+message(${CMAKE_CXX_FLAGS_DEBUG}) # Print Debug Flags After Change
+
+message(${CMAKE_CXX_FLAGS_RELEASE}) # Print Release Flags Before Change
+RemoveReleaseCXXFlag("/RTC1")
+message(${CMAKE_CXX_FLAGS_RELEASE}) # Print Release Flags After Change
+
+
 # TODO: https://stackoverflow.com/questions/38419876/cmake-generate-config-h-like-from-autoconf
 
 # https://stackoverflow.com/questions/60622643/why-my-cmake-does-not-add-cmake-cxx-flags-debug-to-cmake-cxx-flags
@@ -12,8 +32,10 @@ if(!Windows)
     add_compile_options(${TARGET_NAME} -fdiagnostics-color=auto -Wall -Wextra -Wpedantic -Wfatal-errors)
     add_compile_options(${TARGET_NAME} -Wcast-align -Wcast-qual -Wformat -Wpointer-arith -Wwrite-strings)
     add_compile_options(${TARGET_NAME} "$<$<CONFIG:Debug>:-g -O0 -fno-omit-frame-pointer -fno-inline>")
-    add_compile_options(${TARGET_NAME} "-O2") # optimization
+    # add_compile_options(${TARGET_NAME} "-O2") # optimization
 endif()
+
+add_compile_options(${TARGET_NAME} "-O2") # optimization
 
 # might want to move these to the bottom 
 # add_subdirectory(lib)
