@@ -30,7 +30,6 @@ add_library(
     interactive_prompt.cpp
     interactive_prompt.hpp
     json/json.hpp
-    # lara.cpp
     lexer.cpp
     lexer.hpp
     littlelstm/json_exporter.cpp
@@ -125,18 +124,16 @@ add_library(
     write_training_example.hpp
 )
 
-# https://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake
 add_executable(lara lara.cpp)
+
+# require C++ 17 for both targets
 set_property(TARGET lara 
-    PROPERTY CXX_STANDARD 17 # require C++ 17
+    PROPERTY CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 set_property(TARGET laraLib 
-    PROPERTY CXX_STANDARD 17 # require C++ 17
+    PROPERTY CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
-# g++ */*.o */*/*.o -o lara
 target_link_libraries(lara PUBLIC laraLib)
-
-# add_subdirectory(gui)

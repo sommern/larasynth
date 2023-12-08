@@ -1,49 +1,33 @@
-# https://stackoverflow.com/questions/7132862/how-do-i-convert-an-autotools-project-to-a-cmake-project
-
 cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 project(larasynth
     LANGUAGES CXX # use C++
 )
 
-# https://stackoverflow.com/questions/32945670/set-compiler-option-to-default-in-cmake
+# remove the RTC1 flag if using MSVC
+if(CMAKE_GENERATOR MATCHES "Visual Studio")
+    macro(RemoveDebugCXXFlag flag)
+        string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+    endmacro()
+    macro(RemoveReleaseCXXFlag flag)
+        string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    endmacro()
 
-macro(RemoveDebugCXXFlag flag)
-    string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
-endmacro()
+    RemoveDebugCXXFlag("/RTC1")
+    RemoveReleaseCXXFlag("/RTC1")
+endif()
 
-macro(RemoveReleaseCXXFlag flag)
-    string(REPLACE "${flag}" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-endmacro()
-
-message(${CMAKE_CXX_FLAGS_DEBUG}) # Print Debug Flags Before Change
-RemoveDebugCXXFlag("/RTC1")
-
-message(${CMAKE_CXX_FLAGS_DEBUG}) # Print Debug Flags After Change
-
-message(${CMAKE_CXX_FLAGS_RELEASE}) # Print Release Flags Before Change
-RemoveReleaseCXXFlag("/RTC1")
-message(${CMAKE_CXX_FLAGS_RELEASE}) # Print Release Flags After Change
-
-
-# TODO: https://stackoverflow.com/questions/38419876/cmake-generate-config-h-like-from-autoconf
-
-# https://stackoverflow.com/questions/60622643/why-my-cmake-does-not-add-cmake-cxx-flags-debug-to-cmake-cxx-flags
-if(!Windows)
+# use these compiler options to clean up the output if not on Windows
+if(!WIN32)
     add_compile_options(${TARGET_NAME} -fdiagnostics-color=auto -Wall -Wextra -Wpedantic -Wfatal-errors)
     add_compile_options(${TARGET_NAME} -Wcast-align -Wcast-qual -Wformat -Wpointer-arith -Wwrite-strings)
     add_compile_options(${TARGET_NAME} "$<$<CONFIG:Debug>:-g -O0 -fno-omit-frame-pointer -fno-inline>")
-    # add_compile_options(${TARGET_NAME} "-O2") # optimization
 endif()
 
 add_compile_options(${TARGET_NAME} "-O2") # optimization
 
-# might want to move these to the bottom 
-# add_subdirectory(lib)
 add_subdirectory(src)
-# ignore tests for now
-# add_subdirectory(tests)
 
-# https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks
+# find RtMidi
 set(rtmidi_api, "")
 if(Linux)
     # install jack
@@ -51,11 +35,6 @@ if(Linux)
     if(not jack)
         message(FATAL_ERROR "JACK support requires the jack library")
     endif()
-    # install pthread
-    # find_library(pthread pthread_create)
-    # if(not jack)
-    #     message(FATAL_ERROR "RtMidi requires the pthread library")
-    # endif()
     set(rtmidi_api, "${rtmidi_api} -D__UNIX_JACK__")
 endif()
 if(Darwin)
@@ -67,17 +46,7 @@ if(Darwin)
     set(rtmidi_api, "${rtmidi_api} -D__MACOSX_CORE__")
 endif()
 
-# https://stackoverflow.com/questions/1620918/cmake-and-libpthread
 # configure pthreads
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(lara PRIVATE Threads::Threads)
-
-# filesystem
-# find_package(filesystem REQUIRED)
-# target_link_libraries(lara PRIVATE std::filesystem)
-# target_link_libraries(lara stdc++fs)
-
-# TODO: gtest variables here
-
-# message("Larasynth has been configured successfully!") # get this to print only when successful

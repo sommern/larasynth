@@ -55,7 +55,7 @@ $ brew install larasynth
 
 ### From Source
 
-You will need GCC, make, and CMake installed to build Larasynth.
+You will need GCC, make, and CMake installed to build Larasynth. This process is heavily modified on Windows, and is described in the below section titled "Windows."
 
 Download the latest source from here:
 
@@ -75,15 +75,41 @@ $ make
 
 #### Windows
 
-It is recommended that you use mingw as your compiler when on Windows. Here is a [tutorial](https://code.visualstudio.com/docs/cpp/config-mingw) for setting up mingw. You will need to run `mingw32-make` instead of `make` in order to compile using the generated makefiles.
+It is recommended that you use MSVC as your compiler when on Windows. You do not need GCC or make to build Larasynth on Windows, but you still do need CMake.
+
+##### Setting up MSVC
+
+Download MSVC [here](https://visualstudio.microsoft.com/downloads/#remote-tools-for-visual-studio-2022). Make sure to download the *Build Tools for Visual Studio 2022*. Select *Desktop development with C++* when in the installer and then click *Install*. Restart your computer, and in the command line, type:
+
+```nohighlight
+$ msbuild --version
+```
+
+This is to ensure that you have installed MSVC correctly. If you don't get something similar to the below output, you've done something wrong and need to start over:
+
+```nohighlight
+$ msbuild --version
+MSBuild version 17.8.3+195e7f5a3 for .NET Framework
+17.8.3.51904
+```
+
+##### Installing 
 
 When installing from source on Windows, you will need to add a few command line arguments when running CMake.
 
 ```nohighlight
-cmake .. -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
+$ cmake .. -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release
 ```
 
-If you use a different compiler than mingw, you may need to [change the generator used by CMake](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html).
+Instead of running `make`, you will need to run `msbuild` on the .sln file produced by cmake:
+
+```nohighlight
+$ msbuild .\larasynth.sln -maxcpucount:8
+```
+
+The resulting .exe file will be in `build/src/Debug`.
+
+If you choose to use a different compiler than MSVC, you will need to [change the generator used by CMake](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html). 
 
 ## Using Larasynth
 
