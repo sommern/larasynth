@@ -5,13 +5,12 @@
  * 
  */
 
-// #include <config.h>
-
 #include <iostream>
 #include <string>
 #include <signal.h>
 #include <map>
 
+#include "lara.hpp"
 #include "config_directory.hpp"
 #include "interactive_prompt.hpp"
 #include "config_parser.hpp"
@@ -256,7 +255,7 @@ void perform( const string& directory_name, bool verbose ) {
  * larasynth entry point.
  */
 int main( int argc, char** argv ) {
-  cout << "Larasynth version " << "0.3.0" << endl << endl;
+  cout << "Larasynth version " << PACKAGE_VERSION << endl << endl;
 
   // we need a project directory and an action
   if( argc < 3 )

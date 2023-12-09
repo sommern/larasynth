@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "event_logger.hpp"
-
 #include <thread>
+
+#include "event_logger.hpp"
 
 using namespace std;
 using namespace larasynth;

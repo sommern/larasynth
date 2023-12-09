@@ -67,11 +67,9 @@ inline std::string get_timestamp_string() {
   auto rn = std::chrono::system_clock::now();
   std::time_t rnt_t = std::chrono::system_clock::to_time_t(rn);
   std::tm rntm = *std::localtime(&rnt_t);
-  // std::tm rntm = *std::gmtime(&rnt_t); // utc
 
   // calculate microseconds
   auto us = std::chrono::duration_cast<std::chrono::microseconds>(rn.time_since_epoch()) % std::chrono::seconds(1);
-  // auto usRounded = std::chrono::round<std::chrono::milliseconds>(us);
 
   oss << std::put_time(&rntm, "%Y-%m-%d%H.%M.%S.") << us.count();
 

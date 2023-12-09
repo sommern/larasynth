@@ -6,7 +6,7 @@ When porting to Windows, some libraries were Unix specific, and therefore had to
 
 ### A quick word on compilers
 
-I originally chose [Mingw](https://code.visualstudio.com/docs/cpp/config-mingw) for compiling on Windows, but there was a bug associated with compiling using the `-O2` flag using that, so I pivoted to using MSVC. This is a bit less ideal since the process for building is a bit different as a result of it not being GCC (whereas Mingw is a GCC port for Windows).
+I originally chose [MinGW](https://code.visualstudio.com/docs/cpp/config-mingw) for compiling on Windows, but there was a bug associated with compiling using the `-O2` flag using that, so I pivoted to using MSVC. This is a bit less ideal since the process for building is a bit different as a result of it not being GCC (whereas MinGW is a GCC port for Windows).
 
 ## Automake
 

@@ -43,7 +43,7 @@ inline bool is_regular_file( const std::string& filename ) {
   try {
     p = filename;
   }
-  catch ( int e ) { // TODO: probably change what's being caught
+  catch ( int e ) {
     return false;
   }
 
@@ -68,7 +68,7 @@ inline bool is_directory( const std::string& filename ) {
   try {
     p = filename;
   }
-  catch ( int e ) { // TODO: probably change what's being caught
+  catch ( int e ) {
     return false;
   }
 
