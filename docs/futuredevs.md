@@ -10,6 +10,8 @@ When porting to Windows, some libraries were Unix specific, and therefore had to
 
 I originally chose [Mingw](https://code.visualstudio.com/docs/cpp/config-mingw) for compiling on Windows, but there was a bug associated with compiling using the `-O2` flag using that, so I pivoted to using MSVC. This is a bit less ideal since the process for building is a bit different as a result of it not being GCC (whereas Mingw is a GCC port for Windows).
 
+## Automake (WIP)
+
 ## CMake
 
 We switched over from Automake to CMake for the main reason of being able to run the Larasynth on Windows. There are a few outstanding issues/improvements to be made on this front.
@@ -17,27 +19,6 @@ We switched over from Automake to CMake for the main reason of being able to run
 ### Outstanding Issues
 
 These are the existing outstanding issues with CMake (and most of the ones with the project as a whole). This is not an exhaustive list, since there are probably some things that I've missed throughout this process. These are in no particular order, and I tried to be clear about the importance level of most of these issues.
-
-#### Build Types 
-
-For some reason, CMake refuses to change the build type on Windows. This presents a problem as the default build type is "Debug," which sets, among many other compiler flags we don't want, O0. I've brute forced also setting O2 which alleviates this problem, but there's a distinct possiblity that this might cause more bugs later down the line.
-
-For reference, you can change the build type of a CMake run by adding the following flag when running it:
-
-```nohighlight
--DCMAKE_BUILD_TYPE=Release
-```
-
-By "refuses to change the build type," I mean that when specifying the build type, CMake outputs the following message:
-
-```nohighlight
-CMake Warning:
-  Manually-specified variables were not used by the project:
-
-    CMAKE_BUILD_TYPE
-```
-
-It should, at the very least, be using the build type to determine what compiler flags are being used, so this shouldn't be the case.
 
 #### gtest
 

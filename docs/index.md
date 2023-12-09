@@ -98,7 +98,7 @@ MSBuild version 17.8.3+195e7f5a3 for .NET Framework
 When installing from source on Windows, you will need to add a few command line arguments when running CMake.
 
 ```nohighlight
-$ cmake .. -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release
+$ cmake .. -G "Visual Studio 17 2022"
 ```
 
 Instead of running `make`, you will need to run `msbuild` on the .sln file produced by cmake:
