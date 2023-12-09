@@ -1,7 +1,5 @@
 This documentation is intended for any potential future developers of Larasynth.
 
-TODO: maybe move the /ref dir and /gui dir and any automake stuff to a /futuredevs dir in /docs? If doing that then remove the CMakeLists.txts for those.
-
 ## Windows Port
 
 When porting to Windows, some libraries were Unix specific, and therefore had to be switched over to the cross platform versions. As of right now, all of these have been ported over (to the best of my knowledge), but needing to use cross platform libraries (or having alternatives for non Unix systems) will be something that will be continuous throughout development from now on.
@@ -38,8 +36,6 @@ Here are some resources for this that I found:
 - [Stackoverflow: generating a config.h in CMake like from automake](https://stackoverflow.com/questions/38419876/cmake-generate-config-h-like-from-autoconf)
 - [Official CMake Documentation on config.h](https://cmake.org/cmake/help/v3.6/command/configure_file.html)
 
-#### make install (WIP)
-
 #### Linking JACK and CoreMidi (WIP)
 
 I didn't get the chance to 100% test Larasynth with an actual synthesizer before the semester ended, so it's possible that I've not done what I need to do in terms of linking the necessary external libraries/frameworks (ie JACK and CoreMidi). This would likely be found to be a problem only when actually performing as JACK and CoreMidi would both only be used when RtMidi is being used, which would only be used when performing.
@@ -64,6 +60,7 @@ These are some miscellanious resources (mostly Stackoverflow posts) I found when
 - [Stackoverflow: Checking C++ version](https://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake)
 - [Stackoverflow: Checking generator](https://stackoverflow.com/questions/26836361/check-if-generating-a-visual-studio-solution-or-makefile-from-cmake)
 - [Stackoverflow: Why use find_package instead of find_library?](https://stackoverflow.com/questions/23832339/package-vs-library)
+- [Install command](https://cliutils.gitlab.io/modern-cmake/chapters/install/installing.html)
 
 ## GUI (WIP)
 

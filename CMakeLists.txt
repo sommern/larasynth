@@ -29,6 +29,12 @@ add_compile_options(${TARGET_NAME} "-O2") # optimization
 
 add_subdirectory(src)
 
+# used for make install
+install(TARGETS lara laraLib
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+)
+
 # find RtMidi
 set(rtmidi_api "")
 if(CMAKE_SYSTEM MATCHES "Linux") # Linux

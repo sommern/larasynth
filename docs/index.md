@@ -71,6 +71,7 @@ $ mkdir build
 $ cd build
 # cmake ..
 $ make
+$ sudo make install
 ```
 
 #### Windows
@@ -93,9 +94,9 @@ MSBuild version 17.8.3+195e7f5a3 for .NET Framework
 17.8.3.51904
 ```
 
-##### Installing 
+##### Building 
 
-When installing from source on Windows, you will need to add a few command line arguments when running CMake.
+When building from source on Windows, you will need to add a few command line arguments when running CMake.
 
 ```nohighlight
 $ cmake .. -G "Visual Studio 17 2022"
