@@ -30,12 +30,12 @@ add_compile_options(${TARGET_NAME} "-O2") # optimization
 add_subdirectory(src)
 
 # find RtMidi
-set(rtmidi_api, "")
+set(rtmidi_api "")
 if(CMAKE_SYSTEM MATCHES "Linux") # Linux
     # check for jack
     find_package(PkgConfig REQUIRED)
-    pkg_check_modules(JACK REQUIRED have_jack)
-    if(not have_jack)
+    pkg_check_modules(JACK REQUIRED jack)
+    if(NOT JACK_FOUND)
         message(FATAL_ERROR "JACK support requires the jack library")
     endif()
     set(rtmidi_api, "${rtmidi_api} -D__UNIX_JACK__")
