@@ -44,13 +44,22 @@ Here are some resources for this that I found:
 - [Stackoverflow: generating a config.h in CMake like from automake](https://stackoverflow.com/questions/38419876/cmake-generate-config-h-like-from-autoconf)
 - [Official CMake Documentation on config.h](https://cmake.org/cmake/help/v3.6/command/configure_file.html)
 
-#### Linking JACK and CoreMidi (WIP)
+#### Linking JACK and CoreMIDI
 
-This is by far the biggest outstanding issue, if it actually is an issue, since it affects the functioning (or non functioning) of the program. I didn't get the chance to 100% test Larasynth with an actual synthesizer before the semester ended, so it's possible that I've not done what I need to do in terms of linking the necessary external libraries/frameworks (ie JACK and CoreMidi). This would likely be found as a problem only when actually performing since JACK and CoreMidi would both only be used when RtMidi is being used, which would only be used when performing.
+This is by far the biggest outstanding issue, if it actually is an issue, since it affects the functioning (or more accurately non-functioning) of the program. I didn't get the chance to 100% test Larasynth with an actual synthesizer before the semester ended, so it's possible that I incorrectly linked JACK and CoreMIDI. This would likely be found as a problem only when actually performing since JACK and CoreMIDI would both only be used when RtMidi is being used, which would only be used when performing.
 
-In other words, you might have to separately link the libraries for JACK and CoreMidi to the lara executable (make sure to check your CMAKE_SYSTEM/platform first).
+What I have for linking them is in the CMakeLists.txt in the `/src` directory. You might also want to try to add the following lines when linking CoreMIDI:
+```nohighlight
+# target_link_options(lara PRIVATE "LINKER: -framework CoreMIDI -framework CoreFoundation -framework CoreAudio")
+# target_link_options(lara PRIVATE "LINKER: -Wl,-F/Library/Frameworks")
+```
 
-With that being said, at the very least the CMake scripting for checking for these should be correct.
+With that being said, at the very least, the CMake scripting for checking for these should be correct. That is in the CMakeLists.txt in the parent directory.
+
+Some resources I used:
+- [This is what I looked at to figure out what to write for CoreMIDI](https://github.com/thestk/rtmidi/blob/master/CMakeLists.txt#L140)
+- [This is what I looked at to figure out what to write for JACK](https://github.com/Cloudef/vcable/blob/master/CMake/FindJACK.cmake)
+    - [Also this](https://github.com/marsyas/marsyas/blob/master/cmake-modules/FindJack.cmake)
 
 ### Resources
 

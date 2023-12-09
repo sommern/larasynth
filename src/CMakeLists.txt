@@ -141,7 +141,7 @@ if(CMAKE_SYSTEM MATCHES "Linux")
     target_include_directories(lara PRIVATE ${JACK_INCLUDE_DIRS})
     target_link_libraries(lara PRIVATE ${JACK_LIBRARIES})
 elseif(CMAKE_SYSTEM MATCHES "Darwin")
-    target_link_options(lara PRIVATE "LINKER: -framework CoreMIDI -framework CoreFoundation -framework CoreAudio") # TODO: maybe laraLib
+    target_link_libraries(lara PRIVATE ${COREAUDIO_LIB} ${COREMIDI_LIB} ${COREFOUNDATION_LIB})
 endif()
 
 target_link_libraries(lara PRIVATE laraLib)

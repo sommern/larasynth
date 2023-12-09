@@ -46,11 +46,22 @@ if(CMAKE_SYSTEM MATCHES "Linux") # Linux
     endif()
     set(rtmidi_api, "${rtmidi_api} -D__UNIX_JACK__")
 elseif(CMAKE_SYSTEM MATCHES "Darwin") # MacOS
-    # check for coreMidi header
-    check_include_file_cxx("CoreMIDI/CoreMIDI.h" have_coremidi REQUIRED)
-    if(not have_coremidi)
-        message(FATAL_ERROR "CoreMIDI header file not found")
+    # check for CoreMIDI libraries
+    find_library(CORESERVICES_LIB CoreServices)
+    if(NOT CORESERVICES_LIB)
+        message(FATAL_ERROR "CoreServices not found")
     endif()
+
+    find_library(COREAUDIO_LIB CoreAudio)
+    if(NOT COREAUDIO_LIB)
+        message(FATAL_ERROR "CoreAudio not found")
+    endif()
+
+    find_library(COREMIDI_LIB CoreFoundation)
+    if(NOT COREMIDI_LIB)
+        message(FATAL_ERROR "CoreMIDI not found")
+    endif()
+    
     set(rtmidi_api, "${rtmidi_api} -D__MACOSX_CORE__")
 endif()
 
