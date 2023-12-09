@@ -38,15 +38,19 @@ Note that there are CMakeLists.txt files in the `lib` and `tests` directories cu
 
 Automake originally produced a config.h file that included some miscellanious information about the build configuration, namely the presence of certain header files, and version information. I never got a chance to look further into this, so it's possible that this is entirely not needed for CMake, or at least for what we're doing here. There's an example of one of these that was produced from a test build I ran when we were still using Automake in the `futuredevs/ref` directory.
 
+I've added a `lara.hpp` file as a sort of equivalent for an easy spot for changing the version string. The only difference between changing it in the .hpp file and in the build configuration file (ie in CMake) is that it's in a different spot (as far as I can tell).
+
 Here are some resources for this that I found:
 - [Stackoverflow: generating a config.h in CMake like from automake](https://stackoverflow.com/questions/38419876/cmake-generate-config-h-like-from-autoconf)
 - [Official CMake Documentation on config.h](https://cmake.org/cmake/help/v3.6/command/configure_file.html)
 
 #### Linking JACK and CoreMidi (WIP)
 
-This is the biggest outstanding issue, if it actually is an issue. I didn't get the chance to 100% test Larasynth with an actual synthesizer before the semester ended, so it's possible that I've not done what I need to do in terms of linking the necessary external libraries/frameworks (ie JACK and CoreMidi). This would likely be found as a problem only when actually performing since JACK and CoreMidi would both only be used when RtMidi is being used, which would only be used when performing.
+This is by far the biggest outstanding issue, if it actually is an issue, since it affects the functioning (or non functioning) of the program. I didn't get the chance to 100% test Larasynth with an actual synthesizer before the semester ended, so it's possible that I've not done what I need to do in terms of linking the necessary external libraries/frameworks (ie JACK and CoreMidi). This would likely be found as a problem only when actually performing since JACK and CoreMidi would both only be used when RtMidi is being used, which would only be used when performing.
 
-However, I think at the very least the CMake scripting for when I check for these should be correct.
+In other words, you might have to separately link the libraries for JACK and CoreMidi to the lara executable (make sure to check your CMAKE_SYSTEM/platform first).
+
+With that being said, at the very least the CMake scripting for checking for these should be correct.
 
 ### Resources
 

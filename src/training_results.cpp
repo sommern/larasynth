@@ -375,7 +375,7 @@ RepresentationConfig TrainingResults::get_repr_config() {
     throw TrainingResultsException( e.what() );
   }
 
-  RepresentationConfig config( ctrl_output_counts, update_rate, 
+  RepresentationConfig config( ctrl_output_counts, update_rate,
                                feature_config );
 
   return config;
