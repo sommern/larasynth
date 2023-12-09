@@ -3,6 +3,8 @@ project(larasynth
     LANGUAGES CXX # use C++
 )
 
+set(CMAKE_BUILD_TYPE "Release")
+
 # remove the RTC1 flag if using MSVC
 if(CMAKE_GENERATOR MATCHES "Visual Studio")
     macro(RemoveDebugCXXFlag flag)

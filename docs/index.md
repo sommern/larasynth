@@ -55,7 +55,7 @@ $ brew install larasynth
 
 ### From Source
 
-You will need GCC, make, and CMake installed to build Larasynth. This process is heavily modified on Windows, and is described in the below section titled "Windows."
+You will need GCC, make, and [CMake](https://cmake.org/download/) installed to build Larasynth. This process is heavily modified on Windows, and is described in the below section titled "Windows."
 
 Download the latest source from here:
 

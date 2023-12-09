@@ -59,7 +59,11 @@ Here are some resources for this that I found:
 
 #### make install (WIP)
 
+#### Linking JACK and CoreMidi (WIP)
 
+I didn't get the chance to 100% test Larasynth with an actual synthesizer before the semester ended, so it's possible that I've not done what I need to do in terms of linking the necessary external libraries/frameworks (ie JACK and CoreMidi). This would likely be found to be a problem only when actually performing as JACK and CoreMidi would both only be used when RtMidi is being used, which would only be used when performing.
+
+However, when I check for these I think the code should be correct.
 
 ### Resources
 
