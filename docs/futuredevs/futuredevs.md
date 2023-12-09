@@ -8,7 +8,13 @@ When porting to Windows, some libraries were Unix specific, and therefore had to
 
 I originally chose [Mingw](https://code.visualstudio.com/docs/cpp/config-mingw) for compiling on Windows, but there was a bug associated with compiling using the `-O2` flag using that, so I pivoted to using MSVC. This is a bit less ideal since the process for building is a bit different as a result of it not being GCC (whereas Mingw is a GCC port for Windows).
 
-## Automake (WIP)
+## Automake
+
+Larasynth previously used Automake as its build system, but we switched over to CMake. 
+
+The old Automake files are all just hanging out in the project tree, mostly for (relatively easy) future reference. If you wanted to, you could probably try building using them, but I would recommend against it.
+
+Additionally, when I started the process of switching from Automake to CMake, I ran some test builds and sent their relevant outputs to log files (mostly, see more in the config.h section), which I stored in the `futuredevs/ref` directory.
 
 ## CMake
 
@@ -28,9 +34,9 @@ Note that there are CMakeLists.txt files in the `lib` and `tests` directories cu
 
 [This](https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html) looks like it would be a helpful resource for getting gtest working with CMake. 
 
-#### Config.h
+#### config.h
 
-Automake originally produced a config.h file that included some miscellanious information, namely the presence of certain header files, and version information. I never got a chance to look further into this, so it's possible that this is entirely not needed for CMake, or at least for what we're doing here.
+Automake originally produced a config.h file that included some miscellanious information about the build configuration, namely the presence of certain header files, and version information. I never got a chance to look further into this, so it's possible that this is entirely not needed for CMake, or at least for what we're doing here. There's an example of one of these that was produced from a test build I ran when we were still using Automake in the `futuredevs/ref` directory.
 
 Here are some resources for this that I found:
 - [Stackoverflow: generating a config.h in CMake like from automake](https://stackoverflow.com/questions/38419876/cmake-generate-config-h-like-from-autoconf)
@@ -38,9 +44,9 @@ Here are some resources for this that I found:
 
 #### Linking JACK and CoreMidi (WIP)
 
-I didn't get the chance to 100% test Larasynth with an actual synthesizer before the semester ended, so it's possible that I've not done what I need to do in terms of linking the necessary external libraries/frameworks (ie JACK and CoreMidi). This would likely be found to be a problem only when actually performing as JACK and CoreMidi would both only be used when RtMidi is being used, which would only be used when performing.
+This is the biggest outstanding issue, if it actually is an issue. I didn't get the chance to 100% test Larasynth with an actual synthesizer before the semester ended, so it's possible that I've not done what I need to do in terms of linking the necessary external libraries/frameworks (ie JACK and CoreMidi). This would likely be found as a problem only when actually performing since JACK and CoreMidi would both only be used when RtMidi is being used, which would only be used when performing.
 
-However, when I check for these I think the code should be correct.
+However, I think at the very least the CMake scripting for when I check for these should be correct.
 
 ### Resources
 
@@ -62,10 +68,24 @@ These are some miscellanious resources (mostly Stackoverflow posts) I found when
 - [Stackoverflow: Why use find_package instead of find_library?](https://stackoverflow.com/questions/23832339/package-vs-library)
 - [Install command](https://cliutils.gitlab.io/modern-cmake/chapters/install/installing.html)
 
-## GUI (WIP)
+## GUI
 
+Making a GUI was the original (main) intention of this project, hence my fork name. This didn't pan out due to technical problems with QT (more specifically with QT and CMake). All of the files that I'm going to talk about that are related to this are in the `futuredevs/gui` directory. Some quick definitions: QT is the GUI library and its associated programs, QT Designer is a program that allows you to make GUI mockups, and QT Creator is a program that allows you to use a drag and drop interface to create a GUI using QT and integrate that with your codebase.
 
+I made mockups of what a possible GUI for modifying the config files could look like using QT Designer, which produces .ui files. These are in the `/designer` subdirectory in .ui and .png formats. I originally tried importing these directly into QT Creator, which produced the incorrect C++ code, which is understandable. I also tried manually 1:1 recreating the GUI from the .ui files in QT Creator, which also didn't work because QT Creator was confused by my CMake configuration (I think). I tried messing with the project folder (ie which folder to use as the parent directory of the project), but no such luck. I think the problem with QT Creator is that it's intended to be your IDE for your project from the beginning, and that just wasn't feasible here.
+
+I also had problems with getting CMake to even work with the test GUI file on its own (ie in the larasynth directory, but without QT Creator). It hypothetically should've built, but it couldn't find the necessary QT modules for it.
+
+The `CMakeLists.txt` file that I was messing with is also in the directory, along with the test `gui.cpp` file.
+
+### A note on using QT
+
+While I had lots of technical problems with QT, that shouldn't discourage you from using it! I still highly recommend it for making a cross platform GUI, even if it didn't work out here. 
+
+With that being said, I'm convinced that it's more trouble than it's worth to get an already existing (relatively large) codebase to work with QT Creator and an already existing set of CMakeLists.txt files. I think that the solution to this is to just manually write the code, which I really don't think is as bad as it sounds. You could also build a GUI in a standalone QT Creator project, copy the code from that into this, and connect the GUI elements manually, as opposed to using QT Creator for that part. This doesn't alleviate the CMake problem, but that problem was some silly syntax thing that I was doing, or a version conflict, or something silly like that.
 
 ### Resources
-
+- [Download QT](https://wiki.qt.io/Building_Qt_5_from_Git#Getting_the_source_code)
+    - Note that I'd recommend using your package manager for this and build from source as a last resort, as it gave me a lot of trouble.
+- [QT Documentation on using it with CMake](https://doc.qt.io/qt-6/cmake-manual.html)
 - [This was a helpful command for using QT with CMake](https://doc.qt.io/qt-6/qt-standard-project-setup.html)

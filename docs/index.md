@@ -69,19 +69,31 @@ $ tar zxf larasynth-X.Y.Z.tar.gz
 $ cd larasynth-X.Y.Z
 $ mkdir build
 $ cd build
-# cmake ..
+$ cmake ..
 $ make
 $ sudo make install
 ```
 
+If you choose to use a different compiler than GCC (or MSVC on Windows), you will need to [change the generator used by CMake](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html). 
+
 #### Windows
 
-It is recommended that you use MSVC as your compiler when on Windows. You do not need GCC or make to build Larasynth on Windows, but you still do need CMake.
+It is recommended that you use MSVC as your compiler when on Windows. You do not need GCC or make to build Larasynth on Windows, but you still do need CMake. The process for building and installing is completely different on Windows after the point of running CMake.
+
+In other words, you will not be running the following commands:
+
+```nohighlight
+$ make
+$ sudo make install
+```
 
 ##### Setting up MSVC
 
-Download MSVC [here](https://visualstudio.microsoft.com/downloads/#remote-tools-for-visual-studio-2022). Make sure to download the *Build Tools for Visual Studio 2022*. Select *Desktop development with C++* when in the installer and then click *Install*. Restart your computer, and in the command line, type:
+Download MSVC [here](https://visualstudio.microsoft.com/downloads/#remote-tools-for-visual-studio-2022). Make sure to download the *Build Tools for Visual Studio 2022*. Select *Desktop development with C++* when in the installer and then click *Install*. It's recommended that you restart your computer after installation has completed.
 
+Instead of using the usual command line, MSVC requires that you use the Developer Command Prompt for VS. **From this point on, use the Developer Command Prompt for VS unless otherwise noted.** If you start typing "developer" in the Start menu, it should appear. **Run it as an administrator.** 
+ 
+In the Developer Command Prompt, type:
 ```nohighlight
 $ msbuild --version
 ```
@@ -94,23 +106,19 @@ MSBuild version 17.8.3+195e7f5a3 for .NET Framework
 17.8.3.51904
 ```
 
-##### Building 
+##### Installing
 
-When building from source on Windows, you will need to add a few command line arguments when running CMake.
+At this point, make sure to run `cd [path to larasynth build folder]`, as the Developer Command Prompt will start out at the `System32` folder.
 
-```nohighlight
-$ cmake .. -G "Visual Studio 17 2022"
-```
-
-Instead of running `make`, you will need to run `msbuild` on the .sln file produced by cmake:
+Instead of running `make install`, you will need to run `msbuild` on the INSTALL.vcxproj file produced by CMake:
 
 ```nohighlight
-$ msbuild .\larasynth.sln -maxcpucount:8
+$ msbuild .\INSTALL.vcxproj -maxcpucount:8
 ```
 
-The resulting .exe file will be in `build/src/Debug`.
+The resulting executable will be in both the `build/src/Debug` folder and whatever folder is specified in `build/install_manifest.txt` (likely `C:/Program Files (x86)/larasynth/bin`).
 
-If you choose to use a different compiler than MSVC, you will need to [change the generator used by CMake](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html). 
+You can run the executable using the command prompt or Powershell.
 
 ## Using Larasynth
 

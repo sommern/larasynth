@@ -29,7 +29,7 @@ add_compile_options(${TARGET_NAME} "-O2") # optimization
 
 add_subdirectory(src)
 
-# used for make install
+# make install
 install(TARGETS lara laraLib
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
