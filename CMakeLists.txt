@@ -45,8 +45,7 @@ if(CMAKE_SYSTEM MATCHES "Linux") # Linux
         message(FATAL_ERROR "JACK support requires the jack library")
     endif()
     set(rtmidi_api, "${rtmidi_api} -D__UNIX_JACK__")
-endif()
-if(CMAKE_SYSTEM MATCHES "Darwin") # MacOS
+elseif(CMAKE_SYSTEM MATCHES "Darwin") # MacOS
     # check for coreMidi header
     check_include_file_cxx("CoreMIDI/CoreMIDI.h" have_coremidi REQUIRED)
     if(not have_coremidi)

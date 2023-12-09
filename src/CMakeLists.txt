@@ -30,6 +30,7 @@ add_library(
     interactive_prompt.cpp
     interactive_prompt.hpp
     json/json.hpp
+    lara.hpp
     lexer.cpp
     lexer.hpp
     littlelstm/json_exporter.cpp
@@ -136,9 +137,11 @@ set_property(TARGET laraLib
     CXX_STANDARD_REQUIRED ON
 )
 
-target_link_libraries(lara PUBLIC laraLib)
-
 if(CMAKE_SYSTEM MATCHES "Linux")
     target_include_directories(lara PRIVATE ${JACK_INCLUDE_DIRS})
     target_link_libraries(lara PRIVATE ${JACK_LIBRARIES})
+elseif(CMAKE_SYSTEM MATCHES "Darwin")
+    target_link_options(lara PRIVATE "LINKER: -framework CoreMIDI -framework CoreFoundation -framework CoreAudio") # TODO: maybe laraLib
 endif()
+
+target_link_libraries(lara PRIVATE laraLib)
