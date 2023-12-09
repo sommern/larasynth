@@ -137,3 +137,8 @@ set_property(TARGET laraLib
 )
 
 target_link_libraries(lara PUBLIC laraLib)
+
+if(CMAKE_SYSTEM MATCHES "Linux")
+    target_include_directories(lara PRIVATE ${JACK_INCLUDE_DIRS})
+    target_link_libraries(lara PRIVATE ${JACK_LIBRARIES})
+endif()

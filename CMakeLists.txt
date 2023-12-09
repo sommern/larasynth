@@ -17,7 +17,7 @@ if(CMAKE_GENERATOR MATCHES "Visual Studio")
 endif()
 
 # use these compiler options to clean up the output if not on Windows
-if(!WIN32)
+if(NOT WIN32)
     add_compile_options(${TARGET_NAME} -fdiagnostics-color=auto -Wall -Wextra -Wpedantic -Wfatal-errors)
     add_compile_options(${TARGET_NAME} -Wcast-align -Wcast-qual -Wformat -Wpointer-arith -Wwrite-strings)
     add_compile_options(${TARGET_NAME} "$<$<CONFIG:Debug>:-g -O0 -fno-omit-frame-pointer -fno-inline>")
@@ -29,15 +29,16 @@ add_subdirectory(src)
 
 # find RtMidi
 set(rtmidi_api, "")
-if(Linux)
-    # install jack
-    find_library(jack jack_client_open REQUIRED)
-    if(not jack)
+if(CMAKE_SYSTEM MATCHES "Linux") # Linux
+    # check for jack
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(JACK REQUIRED have_jack)
+    if(not have_jack)
         message(FATAL_ERROR "JACK support requires the jack library")
     endif()
     set(rtmidi_api, "${rtmidi_api} -D__UNIX_JACK__")
 endif()
-if(Darwin)
+if(CMAKE_SYSTEM MATCHES "Darwin") # MacOS
     # check for coreMidi header
     check_include_file_cxx("CoreMIDI/CoreMIDI.h" have_coremidi REQUIRED)
     if(not have_coremidi)

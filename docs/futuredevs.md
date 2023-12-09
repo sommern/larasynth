@@ -78,6 +78,7 @@ These are some miscellanious resources (mostly Stackoverflow posts) I found when
 - [Stackoverflow: Unsetting a compiler option](https://stackoverflow.com/questions/32945670/set-compiler-option-to-default-in-cmake)
 - [Stackoverflow: Checking C++ version](https://stackoverflow.com/questions/10984442/how-to-detect-c11-support-of-a-compiler-with-cmake)
 - [Stackoverflow: Checking generator](https://stackoverflow.com/questions/26836361/check-if-generating-a-visual-studio-solution-or-makefile-from-cmake)
+- [Stackoverflow: Why use find_package instead of find_library?](https://stackoverflow.com/questions/23832339/package-vs-library)
 
 ## GUI (WIP)
 
