@@ -48,10 +48,10 @@ Here are some resources for this that I found:
 
 This is by far the biggest outstanding issue, if it actually is an issue, since it affects the functioning (or more accurately non-functioning) of the program. I didn't get the chance to 100% test Larasynth with an actual synthesizer before the semester ended, so it's possible that I incorrectly linked JACK and CoreMIDI. This would likely be found as a problem only when actually performing since JACK and CoreMIDI would both only be used when RtMidi is being used, which would only be used when performing.
 
-What I have for linking them is in the CMakeLists.txt in the `/src` directory. You might also want to try to add the following lines when linking CoreMIDI:
+What I have for linking them is in the CMakeLists.txt in the `/src` directory. You might also want to try to add the following lines when linking CoreMIDI (I used these and it resulted in an error when linking, perhaps some variation on these would work):
 ```nohighlight
-# target_link_options(lara PRIVATE "LINKER: -framework CoreMIDI -framework CoreFoundation -framework CoreAudio")
-# target_link_options(lara PRIVATE "LINKER: -Wl,-F/Library/Frameworks")
+target_link_options(lara PRIVATE "LINKER: -framework CoreMIDI -framework CoreFoundation -framework CoreAudio")
+target_link_options(lara PRIVATE "LINKER: -Wl,-F/Library/Frameworks")
 ```
 
 With that being said, at the very least, the CMake scripting for checking for these should be correct. That is in the CMakeLists.txt in the parent directory.
