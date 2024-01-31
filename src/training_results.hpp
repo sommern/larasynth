@@ -20,7 +20,6 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include <cmath>
-#include <unistd.h>
 #include <map>
 #include <chrono>
 #include <thread>

@@ -350,7 +350,7 @@ void TrainingResults::add_repr_config( const RepresentationConfig&
 RepresentationConfig TrainingResults::get_repr_config() {
   feature_config_t feature_config;
 
-  vector<unsigned long> ctrl_output_counts;
+  vector<size_t> ctrl_output_counts;
   size_t update_rate;
 
   try {

@@ -62,7 +62,7 @@ void ConfigDirectory::process_directory() {
                                     _dir_name );
 
   if( find( root_dir_subdirs.begin(), root_dir_subdirs.end(),
-            "training_results" ) != root_dir_subdirs.end() ) {
+            _dir_name + "training_results" ) != root_dir_subdirs.end() ) {
     vector<string> subdirs;
     string results_dir = _dir_name + "training_results/";
     get_directory_filenames_and_subdirs( results_dir, filenames, subdirs );
@@ -77,7 +77,7 @@ void ConfigDirectory::process_directory() {
   }
 
   if( find( root_dir_subdirs.begin(), root_dir_subdirs.end(),
-            "training_examples" ) != root_dir_subdirs.end() ) {
+            _dir_name + "training_examples" ) != root_dir_subdirs.end() ) {
     vector<string> subdirs;
     string examples_dir = _dir_name + "training_examples/";
 

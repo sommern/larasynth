@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <thread>
+
 #include "event_logger.hpp"
 
 using namespace std;
@@ -47,7 +49,7 @@ void EventLogger::run_logger() {
       cout << e->description( _label ) << endl;
       return_event( e );
     }
-    usleep( 10000 );
+    std::this_thread::sleep_for( std::chrono::microseconds( 10000 ) );
   }
 }
 

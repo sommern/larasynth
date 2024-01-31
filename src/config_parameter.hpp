@@ -41,7 +41,7 @@ enum config_parameter_t {
 class ConfigParameterException : public std::runtime_error {
 public:
   ConfigParameterException( const std::string& message )
-    : runtime_error( message ) {};
+   : runtime_error( message ) {};
 };
 
 class ConfigParameter {

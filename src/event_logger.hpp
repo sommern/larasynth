@@ -22,7 +22,6 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 #include <thread>
 #include <iostream>
 #include <string>
-#include <unistd.h>
 
 #include "readerwriterqueue_lock_free_queue.hpp"
 #include "event_pool.hpp"

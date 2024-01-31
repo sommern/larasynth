@@ -19,10 +19,12 @@ along with Larasynth.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <chrono>
+#include <ostream>
 #include <string>
 #include <sstream>
-#include <sys/time.h>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
 
 namespace larasynth {
 
@@ -59,24 +61,17 @@ inline std::string pad_with_zeros( const std::string& string_to_pad,
  * Get a timestamp in localtime with microsecond precision.
  */
 inline std::string get_timestamp_string() {
-  struct timeval tv;
-	struct timezone tz;
-	struct tm *tm;
-
-  gettimeofday( &tv, &tz );
-  tm = localtime( &tv.tv_sec );
-
-  std::string year = std::to_string( tm->tm_year + 1900 );
-  std::string month = pad_with_zeros( std::to_string( tm->tm_mon + 1 ) );
-  std::string day = pad_with_zeros( std::to_string( tm->tm_mday ) );
-  std::string hour = pad_with_zeros( std::to_string( tm->tm_hour ) );
-  std::string minute = pad_with_zeros( std::to_string( tm->tm_min ) );
-  std::string second = pad_with_zeros( std::to_string( tm->tm_sec ) );
-  std::string microsecond = pad_with_zeros( std::to_string( tv.tv_usec ), 6 );
-
   std::ostringstream oss;
-  oss << year << "-" << month << "-" << day << "-" << hour << ":" << minute
-      << ":" << second << "." << microsecond;
+
+  // get timestamp (without microseconds)
+  auto rn = std::chrono::system_clock::now();
+  std::time_t rnt_t = std::chrono::system_clock::to_time_t(rn);
+  std::tm rntm = *std::localtime(&rnt_t);
+
+  // calculate microseconds
+  auto us = std::chrono::duration_cast<std::chrono::microseconds>(rn.time_since_epoch()) % std::chrono::seconds(1);
+
+  oss << std::put_time(&rntm, "%Y-%m-%d%H.%M.%S.") << us.count();
 
   return oss.str();
 }

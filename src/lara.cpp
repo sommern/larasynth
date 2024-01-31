@@ -5,13 +5,12 @@
  * 
  */
 
-#include <config.h>
-
 #include <iostream>
 #include <string>
 #include <signal.h>
 #include <map>
 
+#include "lara.hpp"
 #include "config_directory.hpp"
 #include "interactive_prompt.hpp"
 #include "config_parser.hpp"

@@ -25,3 +25,9 @@ Makefile.in
 .deps/
 /libtool
 .dirstamp
+
+# cmake stuff
+/build
+
+# vscode
+/.vscode
